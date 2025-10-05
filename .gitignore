@@ -19,7 +19,7 @@ node_modules
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
+.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -43,9 +43,9 @@ Thumbs.db
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
-apps/invoicely-backend/.env.local
+apps/invoicely-backend/.env
 apps/invoicely-backend/.env.development.local
-apps/invoicely-frontend/.env.local
+apps/invoicely-frontend/.env
 apps/invoicely-frontend/.env.development.local
 
 # Next.js

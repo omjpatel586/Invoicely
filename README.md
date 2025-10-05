@@ -1,101 +1,171 @@
-# Invoicely
+# 📄 Invoicely — Smart Invoicing & Effortless Business Management 🚀
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Welcome to **Invoicely**, a powerful, user-friendly platform designed for modern businesses. From **invoices to e-way bills**, **product catalogs to vendor lists**, everything is organized in one seamless dashboard — helping you build professionalism, maintain compliance, and scale your brand effortlessly.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+Whether you're handling **a single business or managing multiple companies**, Invoicely offers the flexibility and control you need — without the complexity.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Finish your CI setup
+## 💡 Why Invoicely?
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/uO0p6oTlV4)
+Because billing shouldn’t feel like a chore.  
+Invoicely transforms paperwork into productivity with:
 
-## Generate a library
+✅ Automated invoice creation  
+✅ Seamless GST & e-way bill generation  
+✅ Multi-company management from a single login  
+✅ Professionally branded documents  
+✅ Secure and searchable record-keeping
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+---
+
+## 🛠️ Core Features
+
+| Module                           | Description                                                            |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| 🧾 **Invoices & Sales Bills**    | Generate GST-compliant invoices in seconds with professional templates |
+| 🚚 **E-Way Bill Integration**    | Create and manage transport documents efficiently                      |
+| 📦 **Product / Service Catalog** | Maintain stock details with pricing, taxes, and unit tracking          |
+| 🧑‍🤝‍🧑 **Vendors & Customers**       | Centralized contact management for suppliers and buyers                |
+| 🧑‍💼 **Multi-Company Management**  | Users can switch and operate between multiple registered companies     |
+| 📊 **Reports & Analytics**       | View insights on sales, dues, and growth metrics _(coming soon)_       |
+
+---
+
+## 🧠 Who Is It For?
+
+- 🏢 Small & Medium Enterprises
+- 🛒 Retailers & Wholesalers
+- 🚛 Transport & Logistics Providers
+- 📦 Manufacturing & Trading Firms
+- 🧑‍💻 Freelancers & Service Providers
+
+---
+
+## 🗂️ Nx Monorepo Folder Structure
+
+```bash
+/INVOICELY  # Nx Monorepo Root
+
+├── apps/
+│   ├── invoicely-backend/          # Backend Application (NestJS)
+│   │   └── src/
+│   │       ├── app.module.ts
+│   │       ├── main.ts
+│   │       └── modules/           # Feature Modules
+│   │           ├── invoice/
+│   │           │   ├── invoice.controller.ts
+│   │           │   ├── invoice.service.ts
+│   │           │   ├── invoice.module.ts
+│   │           │   └── dto/
+│   │           │       ├── create-invoice.dto.ts
+│   │           │       └── update-invoice.dto.ts
+│   │           ├── product/
+│   │           ├── vendor/
+│   │           ├── eway-bill/
+│   │           └── company/
+│   ├── invoicely-frontend/         # Frontend Application (Next.js, In Progress)
+│   │   └── src/
+│   │       └── ...
+│
+├── libs/ or shared/                # Shared modules (utilities, DTOs, interfaces, constants)
+│   ├── constants/
+│   ├── types/
+│   └── utils/
+│   └── api-interfaces/
+│   └── interfaces/
+│
+├── nx.json
+├── workspace.json
+├── package.json
+└── tsconfig.base.json
 ```
 
-## Run tasks
-
-To build the frontend app:
-
-```sh
-npx nx build invoicely-frontend
+```bash
+🔧 Tech Stack
+| Layer            | Tech Used                                                        |
+| ---------------- | ---------------------------------------------------------------- |
+| Backend          | NestJS (Node.js + TypeScript), MongoDB for database              |
+| Frontend         | Next.js (React framework, setup-in-progress)                           |
+| Monorepo Tooling | Nx Workspace for project orchestration and shared libraries      |
+| Shared Logic     | `shared` folder for DTOs, utility functions, and interfaces, components, styles |
 ```
 
-To build the backend app:
+```bash
+🚀 Development Setup
 
-```sh
-npx nx build invoicely-backend
+# Install dependencies
+pnpm install
+
+# Run backend app
+nx serve invoicely-backend
+
+# Run frontend app (once available)
+nx dev invoicely-frontend
+
+# Generate new module/service/controller for backend
+nx g @nrwl/nest:module <module-name> --project=invoicely-backend
+nx g @nrwl/nest:controller <controller-name> --project=invoicely-backend
+nx g @nrwl/nest:service <service-name> --project=invoicely-backend
+⚠️ Make sure your MongoDB instance is running and .env variables are set for database connection.
 ```
 
-To run any backend app with Nx use:
+## 🤝 Contributing
 
-```sh
-npx nx serve invoicely-backend
-```
+Invoicely is continuously evolving.
 
-To run any frontend app with Nx use:
+This is an Open-Source repository, and contributions are always welcome! If you find an issue, please create a new issue under the "Issues" section. To contribute code, fork the repository and submit a pull request. Your contributions will help make this a valuable resource for the community!
 
-```sh
-npx nx dev invoicely-frontend
-```
+1. Fork the repository
+2. Create a new branch: git checkout -b feature/my-feature
+3. Make your changes
+4. Commit your changes: git commit -am 'Add new feature'
+5. Push to the branch: git push origin feature/my-feature
+6. Open a Pull Request
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## ✨ Contributors
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-## Versioning and releasing
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <>
+      <td align="center">
+        <a href="https://github.com/omjpatel586">
+          <img src="https://avatars.githubusercontent.com/u/119939918?v=4&s=100" width="100" alt="Om J Patel"/>
+          <br />
+          <b>Om J Patel</b>
+        </a>
+        <br />
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Code">💻</a>
+        <a href="#data-omjpatel586" title="Data">🔣</a>
+        <a href="#content-omjpatel586" title="Content">🖋</a>
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Documentation">📖</a>
+        <a href="#ideas-omjpatel586" title="Ideas, Planning, & Feedback">🤔</a>
+        <a href="#maintenance-omjpatel586" title="Maintenance">🚧</a>
+        <a href="#research-omjpatel586" title="Research">🔬</a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/chetannada">
+          <img src="https://avatars.githubusercontent.com/u/83969719?v=4&s=100" width="100" alt="Chetan Nada"/>
+          <br />
+          <b>Chetan Nada</b>
+        </a>
+        <br />
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=chetannada" title="Code">💻</a>
+        <a href="#ideas-chetannada" title="Ideas, Planning, & Feedback">🤔</a>
+        <a href="#research-chetannada" title="Research">🔬</a>
+        <a href="#design-chetannada" title="Design">🎨</a>
+        <a href="#content-chetannada" title="Content">🖋</a>
+      </td>
+    </tr>
 
-To version and release the library use
+  </tbody>
+</table>
 
-```
-npx nx release
-```
+## 🤝 Let's Connect
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+[![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/om-j-patel/)
