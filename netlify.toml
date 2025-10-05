@@ -1,6 +1,6 @@
 [build]
   command = "npx nx build invoicely-frontend"
-  publish = "apps/invoicely-frontend"
+  publish = "apps/invoicely-frontend/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
