@@ -1,5 +1,5 @@
 [build]
-  command = "nx build invoicely-frontend"
+  command = "npx nx build invoicely-frontend"
   publish = "dist/apps/invoicely-frontend"
 
 [[plugins]]
