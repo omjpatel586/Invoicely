@@ -1,3 +1,8 @@
 [build]
   command = "npx nx build invoicely-frontend"
   publish = "apps/invoicely-frontend/.next"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+  [plugins.inputs]
+  externalNodeModules = ["firebase-admin", "mongoose", "@rxjs", "@nestjs/common", "@nestjs/config", "@nestjs/core", "@nestjs/platform-express", "express", "@nx/nest"]
