@@ -132,7 +132,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tbody>
-    <tr>
+    <>
       <td align="center">
         <a href="https://github.com/omjpatel586">
           <img src="https://avatars.githubusercontent.com/u/119939918?v=4&s=100" width="100" alt="Om J Patel"/>
@@ -148,7 +148,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
         <a href="#maintenance-omjpatel586" title="Maintenance">🚧</a>
         <a href="#research-omjpatel586" title="Research">🔬</a>
       </td>
-
       <td align="center">
         <a href="https://github.com/chetannada">
           <img src="https://avatars.githubusercontent.com/u/83969719?v=4&s=100" width="100" alt="Chetan Nada"/>
