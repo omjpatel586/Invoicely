@@ -128,14 +128,41 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omjpatel586"><img src="https://avatars.githubusercontent.com/u/119939918?v=4?s=100" width="100px;" alt="Chetan Nada"/><br /><sub><b>Chetan Nada</b></sub></a><br /><a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Code">💻</a> <a href="#data-omjpatel586" title="Data">🔣</a> <a href="#content-omjpatel586" title="Content">🖋</a> <a href="#design-omjpatel586" title="Design">🎨</a> <a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Documentation">📖</a> <a href="#ideas-omjpatel586" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-chetannada" title="Maintenance">🚧</a> <a href="#research-chetannada" title="Research">🔬</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/chetannada"><img src="https://avatars.githubusercontent.com/u/83969719?v=4?s=100" width="100px;" alt="Om J Patel."/><br /><sub><b>Om J Patel.</b></sub></a><br /><a href="https://github.com/omjpatel586/Invoicely/commits?author=chetannada" title="Code">💻</a> <a href="#ideas-chetannada" title="Ideas, Planning, & Feedback">🤔</a> <a href="#research-chetannada" title="Research">🔬</a></td>
+      <td align="center">
+        <a href="https://github.com/omjpatel586">
+          <img src="https://avatars.githubusercontent.com/u/119939918?v=4&s=100" width="100" alt="Om J Patel"/>
+          <br />
+          <b>Om J Patel</b>
+        </a>
+        <br />
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Code">💻</a>
+        <a href="#data-omjpatel586" title="Data">🔣</a>
+        <a href="#content-omjpatel586" title="Content">🖋</a>
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=omjpatel586" title="Documentation">📖</a>
+        <a href="#ideas-omjpatel586" title="Ideas, Planning, & Feedback">🤔</a>
+        <a href="#maintenance-omjpatel586" title="Maintenance">🚧</a>
+        <a href="#research-omjpatel586" title="Research">🔬</a>
+      </td>
+
+      <td align="center">
+        <a href="https://github.com/chetannada">
+          <img src="https://avatars.githubusercontent.com/u/83969719?v=4&s=100" width="100" alt="Chetan Nada"/>
+          <br />
+          <b>Chetan Nada</b>
+        </a>
+        <br />
+        <a href="https://github.com/omjpatel586/Invoicely/commits?author=chetannada" title="Code">💻</a>
+        <a href="#ideas-chetannada" title="Ideas, Planning, & Feedback">🤔</a>
+        <a href="#research-chetannada" title="Research">🔬</a>
+        <a href="#design-chetannada" title="Design">🎨</a>
+        <a href="#content-chetannada" title="Content">🖋</a>
+      </td>
     </tr>
   </tbody>
 </table>
 
 
-## 🌐 Let's Connect
+## 🤝 Let's Connect
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/om-j-patel/)
+[![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/om-j-patel/)
 ```
