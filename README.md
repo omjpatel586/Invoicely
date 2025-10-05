@@ -79,7 +79,9 @@ Invoicely transforms paperwork into productivity with:
 ├── workspace.json
 ├── package.json
 └── tsconfig.base.json
+```
 
+```bash
 🔧 Tech Stack
 | Layer            | Tech Used                                                        |
 | ---------------- | ---------------------------------------------------------------- |
@@ -87,7 +89,9 @@ Invoicely transforms paperwork into productivity with:
 | Frontend         | Next.js (React framework, setup-in-progress)                           |
 | Monorepo Tooling | Nx Workspace for project orchestration and shared libraries      |
 | Shared Logic     | `shared` folder for DTOs, utility functions, and interfaces, components, styles |
+```
 
+```bash
 🚀 Development Setup
 
 # Install dependencies
@@ -104,6 +108,7 @@ nx g @nrwl/nest:module <module-name> --project=invoicely-backend
 nx g @nrwl/nest:controller <controller-name> --project=invoicely-backend
 nx g @nrwl/nest:service <service-name> --project=invoicely-backend
 ⚠️ Make sure your MongoDB instance is running and .env variables are set for database connection.
+```
 
 ## 🤝 Contributing
 
@@ -158,11 +163,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
         <a href="#content-chetannada" title="Content">🖋</a>
       </td>
     </tr>
+
   </tbody>
 </table>
-
 
 ## 🤝 Let's Connect
 
 [![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/om-j-patel/)
-```
