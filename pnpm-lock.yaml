@@ -20,6 +20,9 @@ importers:
       '@nestjs/platform-express':
         specifier: ^11.0.0
         version: 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.6)
+      '@netlify/plugin-nextjs':
+        specifier: ^5.13.4
+        version: 5.13.4
       axios:
         specifier: ^1.6.0
         version: 1.11.0
@@ -2033,6 +2036,10 @@ packages:
         optional: true
       '@nestjs/platform-express':
         optional: true
+
+  '@netlify/plugin-nextjs@5.13.4':
+    resolution: {integrity: sha512-F53b8FU49b3BXOvziiOLcgTxG6nLrQiieux4KvoBJo8YCCUu1IJRNncFw8/LfSG2IMpwWMe8fKBBKqSoi21EZA==}
+    engines: {node: '>=18.0.0'}
 
   '@next/env@15.2.5':
     resolution: {integrity: sha512-uWkCf9C8wKTyQjqrNk+BA7eL3LOQdhL+xlmJUf2O85RM4lbzwBwot3Sqv2QGe/RGnc3zysIf1oJdtq9S00pkmQ==}
@@ -10626,6 +10633,8 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@nestjs/platform-express': 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@11.1.6)
+
+  '@netlify/plugin-nextjs@5.13.4': {}
 
   '@next/env@15.2.5': {}
 
