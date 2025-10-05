@@ -1,5 +1,5 @@
 {
-  "name": "@Invoicely/source",
+  "name": "invoicely",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {},
@@ -48,9 +48,13 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "axios": "^1.6.0",
+    "express": "^5.1.0",
+    "firebase": "^12.3.0",
+    "firebase-admin": "^13.5.0",
     "next": "~15.2.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hot-toast": "^2.6.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   }
