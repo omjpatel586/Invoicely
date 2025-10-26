@@ -1,0 +1,10 @@
+[build]
+  command = "npx nx build invoicely-frontend"
+  publish = "dist/apps/invoicely-frontend/.next"
+  functions = "dist/apps/invoicely-frontend/.netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
