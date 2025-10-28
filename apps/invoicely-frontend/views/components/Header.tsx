@@ -15,7 +15,7 @@ import Sidebar from './Sidebar';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { data: user, loading } = useSelector((state: RootState) => state.user);
+  const { data: user } = useSelector((state: RootState) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const windowSize = useWindowSize();
