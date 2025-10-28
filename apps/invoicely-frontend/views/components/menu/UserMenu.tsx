@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { FiLogOut } from 'react-icons/fi';
+import { IUser } from 'shared/api-interfaces/src';
 import MenuItem from './MenuItem';
 
 interface HandleLogoutProps {
   handleLogoutClick: () => void;
+  user: Partial<IUser> | null;
 }
 
-const UserMenu = ({ handleLogoutClick }: HandleLogoutProps) => {
+const UserMenu = ({ handleLogoutClick, user }: HandleLogoutProps) => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -27,8 +29,11 @@ const UserMenu = ({ handleLogoutClick }: HandleLogoutProps) => {
         className="flex items-center gap-2"
       >
         <img
-          src={'https://avatars.githubusercontent.com/u/119939918?v=4'}
-          alt={`Om J Patel's avatar`}
+          src={
+            user?.profile ||
+            'https://avatars.githubusercontent.com/u/119939918?v=4'
+          }
+          alt={`Profile picture of ${user?.firstName}`}
           className="w-8 h-8 max3xs:w-7 max3xs:h-7 rounded-full border-2 border-text-light dark:border-text-dark"
         />
       </button>
@@ -38,13 +43,18 @@ const UserMenu = ({ handleLogoutClick }: HandleLogoutProps) => {
           <div className="p-4 border-b">
             <div className="flex items-center gap-3">
               <img
-                src={'https://avatars.githubusercontent.com/u/119939918?v=4'}
-                alt={'Om J Patel'}
+                src={
+                  user?.profile ||
+                  'https://avatars.githubusercontent.com/u/119939918?v=4'
+                }
+                alt={`Profile picture of ${user?.firstName}`}
                 className="w-12 h-12 rounded-full border-2 border-text-light dark:border-text-dark object-cover"
               />
               <div>
-                <p className="font-semibold">{'Om J Patel'}</p>
-                <p className="text-xs">@{'omjpatel586'}</p>
+                <p className="font-semibold">
+                  {user ? user.firstName + ' ' + user.lastName : 'Om J Patel'}
+                </p>
+                <p className="text-xs"></p>
               </div>
             </div>
           </div>

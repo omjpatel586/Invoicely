@@ -4,6 +4,7 @@
     "jsx": "preserve",
     "strict": true,
     "noEmit": true,
+    "declaration": true,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "module": "esnext",
@@ -15,6 +16,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
     "plugins": [
       {
         "name": "next"
