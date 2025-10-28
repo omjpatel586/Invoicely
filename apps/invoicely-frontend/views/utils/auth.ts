@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_BACKEND_URL = 'http://localhost:4000' + '/api';
+export const API_BACKEND_URL = process.env.NEXT_PUBLIC_API_BACKEND_URL + '/api';
 
 export const loginUserClient = async (
   // dispatch: AppDispatch,

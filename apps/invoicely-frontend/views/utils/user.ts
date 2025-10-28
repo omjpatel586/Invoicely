@@ -1,6 +1,6 @@
 import { clientAxios } from '../../libs/axiosInstance';
 
-export const API_BACKEND_URL = 'http://localhost:4000' + '/api';
+export const API_BACKEND_URL = process.env.NEXT_PUBLIC_API_BACKEND_URL + '/api';
 
 export const fetchUserDetails = async () =>
   // dispatch: AppDispatch,
