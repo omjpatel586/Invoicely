@@ -7,7 +7,7 @@ interface User {
   avatar?: string;
 }
 
-interface UserState {
+export interface UserState {
   data: User | null;
   loading: boolean;
 }
