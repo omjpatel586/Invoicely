@@ -1,9 +1,10 @@
 import { Toaster } from 'react-hot-toast';
-import './global.css';
-import Header from '../views/components/Header';
-import Footer from '../views/components/Footer';
 import ContentWrapper from '../views/components/ContentWrapper';
+import Footer from '../views/components/Footer';
+import Header from '../views/components/Header';
 import { ThemeProvider } from '../views/context/ThemeContext';
+import { ReduxProvider } from '../views/redux/provider';
+import './global.css';
 
 export const metadata = {
   title: 'Invoicely – Smart Invoice Generator',
@@ -27,7 +28,7 @@ export const metadata = {
     title: 'Invoicely – Smart Invoice Generator',
     description:
       'Generate professional invoices instantly. Invoicely makes invoicing simple, fast, and secure for businesses.',
-    url: 'https://invoicely.netlify.app',
+    url: 'https://invoicely-eta.vercel.app/',
     siteName: 'Invoicely',
     images: [
       {
@@ -56,19 +57,21 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-body-light dark:bg-body-dark text-text-light dark:text-text-dark">
         <ThemeProvider>
-          <Header />
+          <ReduxProvider>
+            <Header />
 
-          <ContentWrapper>{children}</ContentWrapper>
+            <ContentWrapper>{children}</ContentWrapper>
 
-          <Footer />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              success: { style: { background: 'green', color: 'white' } },
-              error: { style: { background: 'red', color: 'white' } },
-              duration: 3000,
-            }}
-          />
+            <Footer />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                success: { style: { background: 'green', color: 'white' } },
+                error: { style: { background: 'red', color: 'white' } },
+                duration: 3000,
+              }}
+            />
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

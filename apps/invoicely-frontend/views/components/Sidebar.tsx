@@ -1,18 +1,13 @@
 import { useEffect } from 'react';
-import { FiLogIn, FiLogOut } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
 import MenuItem from '../components/menu/MenuItem';
 
 interface SidebarProps {
   handleLogoutClick: () => void;
-  handleLoginClick: () => void;
   sidebarOpen: boolean;
 }
 
-const Sidebar = ({
-  handleLogoutClick,
-  handleLoginClick,
-  sidebarOpen,
-}: SidebarProps) => {
+const Sidebar = ({ handleLogoutClick, sidebarOpen }: SidebarProps) => {
   useEffect(() => {
     if (sidebarOpen) {
       document.body.classList.add('overflow-hidden');
@@ -29,21 +24,12 @@ const Sidebar = ({
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      {true ? (
-        <MenuItem
-          icon={<FiLogOut />}
-          label="Logout"
-          onClick={handleLogoutClick}
-          pxClass="px-8"
-        />
-      ) : (
-        <MenuItem
-          icon={<FiLogIn />}
-          label="Login"
-          onClick={handleLoginClick}
-          pxClass="px-8"
-        />
-      )}
+      <MenuItem
+        icon={<FiLogOut />}
+        label="Logout"
+        onClick={handleLogoutClick}
+        pxClass="px-8"
+      />
     </ul>
   );
 };

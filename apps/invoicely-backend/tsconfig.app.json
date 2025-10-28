@@ -4,9 +4,10 @@
     "outDir": "../../dist/out-tsc",
     "module": "NodeNext",
     "types": ["node"],
+    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2021"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["**/*.ts"]
 }
