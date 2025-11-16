@@ -1,4 +1,3 @@
-import { Provider } from '@invoicely/constants';
 export interface IUser {
   _id: string;
   firstName: string;
@@ -6,5 +5,5 @@ export interface IUser {
   email: string;
   password: string;
   profile: string;
-  provider: Provider;
+  provider: string;
 }
