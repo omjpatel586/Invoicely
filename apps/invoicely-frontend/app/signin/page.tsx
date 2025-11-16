@@ -2,10 +2,11 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { getAuthToken } from '../../libs/auth';
 import ScreenLoader from '../../views/components/loader';
-import { loginUserClient } from '../../views/utils/auth';
+import { loginUserNextJSClient } from '../../views/utils/auth';
 import { signInWithGoogle } from './firebaseConfig';
 
 export default function LoginPage() {
@@ -17,14 +18,25 @@ export default function LoginPage() {
       const result = await signInWithGoogle();
       const userIdToken = await result.user.getIdToken();
       setLoading(true);
-      await loginUserClient(userIdToken);
+      await loginUserNextJSClient(userIdToken);
       setLoading(false);
       toast.success('Google Login Successful!');
       router.push('/');
-    } catch (error) {
+    } catch {
       toast.error('Google Login Failed!');
     }
   };
+
+  useEffect(() => {
+    const redirectToDashboardIfAlreadySignIn = async () => {
+      const token = await getAuthToken();
+      if (token) {
+        router.push('/');
+      }
+    };
+
+    redirectToDashboardIfAlreadySignIn();
+  }, [router]);
 
   if (loading) {
     return <ScreenLoader />;

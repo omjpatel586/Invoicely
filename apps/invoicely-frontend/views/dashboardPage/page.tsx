@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setLoading, setUser } from '../redux/slices/userSlice';
 import { fetchUserDetails } from '../utils/user';
 
-const DashboardPage = ({ token }: { token: string }) => {
+const DashboardPage = ({ token }: { token?: string }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
