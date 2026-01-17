@@ -59,13 +59,15 @@ const UserMenu = ({ handleLogoutClick, user }: HandleLogoutProps) => {
             </div>
           </div>
 
-          <ul className="text-sm">
-            <MenuItem
-              icon={<FiLogOut />}
-              label="Logout"
-              onClick={handleLogoutClick}
-            />
-          </ul>
+          {user && (
+            <ul className="text-sm">
+              <MenuItem
+                icon={<FiLogOut />}
+                label="Logout"
+                onClick={handleLogoutClick}
+              />
+            </ul>
+          )}
         </div>
       )}
     </div>

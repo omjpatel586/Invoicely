@@ -17,7 +17,8 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@invoicely/api-interfaces": ["../../shared/api-interfaces/src/index.ts"],
+      "@invoicely/constants": ["../../shared/constants/src/index.ts"]
     },
     "plugins": [
       {

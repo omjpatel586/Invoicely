@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLoading, setUser } from '../redux/slices/userSlice';
 import { fetchUserDetails } from '../utils/user';
+import Company from './Company';
 
 const DashboardPage = ({ token }: { token?: string }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const DashboardPage = ({ token }: { token?: string }) => {
     fetchProfile();
   }, [dispatch]);
 
-  return <></>;
+  return <Company />;
 };
 
 export default DashboardPage;

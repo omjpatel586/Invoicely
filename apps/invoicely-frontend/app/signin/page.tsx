@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getAuthToken } from '../../libs/auth';
 import ScreenLoader from '../../views/components/loader';
-import { loginUserNextJSClient } from '../../views/utils/auth';
+import { loginUserClient } from '../../views/utils/auth';
 import { signInWithGoogle } from './firebaseConfig';
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
       const result = await signInWithGoogle();
       const userIdToken = await result.user.getIdToken();
       setLoading(true);
-      await loginUserNextJSClient(userIdToken);
+      await loginUserClient(userIdToken);
       setLoading(false);
       toast.success('Google Login Successful!');
       router.push('/');

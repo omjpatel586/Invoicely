@@ -3,6 +3,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CompanyModule } from './company/company.module';
 import { EnvConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { FirebaseModule } from './firebase/firebase.module';
@@ -16,6 +17,7 @@ import { UserProfileModule } from './user-profile/user-profile.module';
     FirebaseModule,
     AuthModule,
     UserProfileModule,
+    CompanyModule
   ],
   controllers: [AppController],
   providers: [

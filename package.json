@@ -49,6 +49,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
@@ -66,7 +67,7 @@
     "firebase-admin": "^13.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
-    "next": "~15.2.4",
+    "next": "15.2.8",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hot-toast": "^2.6.0",

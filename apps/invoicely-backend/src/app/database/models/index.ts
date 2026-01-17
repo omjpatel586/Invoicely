@@ -1,10 +1,12 @@
 import { ModelDefinition } from '@nestjs/mongoose';
 import { CallbackWithoutResultAndOptionalError, Schema } from 'mongoose';
 import { BaseSchema } from './base.model';
+import { Company, CompanySchema } from './company.model';
 import { User, UserSchema } from './user.model';
 
 export const Schemas: ModelDefinition[] = [
   { name: User.name, schema: UserSchema, collection: User.name },
+  { name: Company.name, schema: CompanySchema, collection: Company.name },
 ];
 
 export interface ThisType {
