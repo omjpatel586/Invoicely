@@ -43,10 +43,10 @@ Thumbs.db
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
-apps/invoicely-backend/.env
-apps/invoicely-backend/.env.development.local
-apps/invoicely-frontend/.env
-apps/invoicely-frontend/.env.development.local
+apps/server/.env
+apps/server/.env.development.local
+apps/web/.env
+apps/web/.env.development.local
 
 # Next.js
 .next

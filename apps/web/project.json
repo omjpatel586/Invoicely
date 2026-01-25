@@ -1,7 +1,7 @@
 {
-  "name": "invoicely-frontend",
+  "name": "web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/invoicely-frontend",
+  "sourceRoot": "apps/web",
   "projectType": "application",
   "tags": [],
   "// targets": "to see all targets run: nx show project invoicely-frontend --web",
