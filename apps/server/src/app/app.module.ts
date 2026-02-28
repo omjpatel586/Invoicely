@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -18,7 +19,8 @@ import { UserProfileModule } from './user-profile/user-profile.module';
     FirebaseModule,
     AuthModule,
     UserProfileModule,
-    CompanyModule
+    CompanyModule,
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController],
   providers: [
