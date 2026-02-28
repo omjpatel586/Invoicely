@@ -1,5 +1,6 @@
 'use client';
 
+import { IUser } from '@invoicely/api-interfaces';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const { data: user } = useSelector((state: RootState) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const userDetails: Pick<IUser, 'firstName' | 'lastName' | 'profile'> = {
+    firstName: user?.firstName || 'Om J',
+    lastName: user?.lastName || 'Patel',
+    profile:
+      user?.profile || 'https://avatars.githubusercontent.com/u/119939918?v=4',
+  };
 
   const windowSize = useWindowSize();
 
@@ -30,14 +37,18 @@ const Header = () => {
   const handleLogoutClick = async () => {
     dispatch(setUser(null));
     await logOutUserClient();
-    redirect('/signin');
+    redirect('/auth/signin');
   };
 
   const renderAuthUI = () => {
     return (
       <>
         <ThemeToggle />
-        <UserMenu handleLogoutClick={handleLogoutClick} user={user || null} />
+        <UserMenu
+          handleLogoutClick={handleLogoutClick}
+          user={userDetails}
+          isLoggedIn={!!user}
+        />
       </>
     );
   };

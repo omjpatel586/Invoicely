@@ -1,12 +1,12 @@
 'use client';
 
+import Company from '@/views/dashboardPage/Company';
+import { setLoading, setUser } from '@/views/redux/slices/userSlice';
+import { fetchUserDetails } from '@/views/utils/user';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setLoading, setUser } from '../redux/slices/userSlice';
-import { fetchUserDetails } from '../utils/user';
-import Company from './Company';
 
-const DashboardPage = () => {
+export default function CompanyView() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,6 +26,4 @@ const DashboardPage = () => {
   }, [dispatch]);
 
   return <Company />;
-};
-
-export default DashboardPage;
+}

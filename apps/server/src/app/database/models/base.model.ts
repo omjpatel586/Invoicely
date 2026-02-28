@@ -3,8 +3,6 @@ import { Document } from 'mongoose';
 
 @Schema({})
 export class BaseSchema extends Document {
-  override _id: string;
-
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
 
@@ -16,13 +14,4 @@ export class BaseSchema extends Document {
 
   @Prop({ type: Date })
   updatedAt: Date;
-
-  constructor() {
-    super();
-    this._id = '';
-    this.isDeleted = false;
-    this.deletedAt = null;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
-  }
 }

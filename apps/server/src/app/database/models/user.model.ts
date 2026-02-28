@@ -25,17 +25,6 @@ export class User extends BaseSchema {
 
   @Prop({ type: Object, default: {} })
   google: object;
-
-  constructor() {
-    super();
-    this.firstName = '';
-    this.lastName = '';
-    this.provider = Provider.GOOGLE;
-    this.email = '';
-    this.password = '';
-    this.profile = '';
-    this.google = {};
-  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

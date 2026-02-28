@@ -1,14 +1,8 @@
+import { IUser } from '@invoicely/api-interfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-}
-
 export interface UserState {
-  data: User | null;
+  data: IUser | null;
   loading: boolean;
 }
 
@@ -21,7 +15,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
+    setUser: (state, action: PayloadAction<IUser | null>) => {
       state.data = action.payload;
       state.loading = false;
     },

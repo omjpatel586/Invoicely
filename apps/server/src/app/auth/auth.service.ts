@@ -53,7 +53,7 @@ export class AuthService {
     if (user) {
       user.google = decodedToken;
       await user.save();
-      response._id = user._id.toString();
+      response._id = user._id;
       response.firstName = user.firstName;
       response.lastName = user.lastName;
       response.email = user.email;
@@ -67,7 +67,7 @@ export class AuthService {
         google: decodedToken,
       });
       await newUser.save();
-      response._id = newUser._id.toString();
+      response._id = newUser._id;
       response.firstName = newUser.firstName;
       response.lastName = newUser.lastName;
       response.email = newUser.email;
@@ -76,7 +76,7 @@ export class AuthService {
 
     const newAuthToken = JwtHelperService.generateToken(
       {
-        _id: response._id.toString() as string,
+        _id: response._id,
         email: response.email,
         createdAt: response.createdAt as Date,
       },

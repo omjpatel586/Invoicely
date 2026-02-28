@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { API_BACKEND_URL } from '../../libs/axiosInstance';
 
-export const API_BACKEND_URL = process.env.NEXT_PUBLIC_API_BACKEND_URL + '/api';
 export const NEXT_API_URL = '/api';
 
 export const loginUserClient = async (
