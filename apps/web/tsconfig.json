@@ -11,14 +11,26 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@invoicely/api-interfaces": ["../../shared/api-interfaces/src/index.ts"],
-      "@invoicely/constants": ["../../shared/constants/src/index.ts"]
+      "@/*": [
+        "./*"
+      ],
+      "@invoicely/api-interfaces": [
+        "../../shared/api-interfaces/src/index.ts"
+      ],
+      "@invoicely/constants": [
+        "../../shared/constants/src/index.ts"
+      ]
     },
     "plugins": [
       {
@@ -31,10 +43,15 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "../../apps/invoicely-frontend/.next/types/**/*.ts",
-    "../../dist/apps/invoicely-frontend/.next/types/**/*.ts",
+    "../../apps/web/.next/types/**/*.ts",
+    "../../dist/apps/web/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

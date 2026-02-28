@@ -41,7 +41,6 @@ export interface ICompany {
   headOfficeSplitAddress: IAddress;
 
   registrationDate: Date;
-  lastUpdatedOn: Date;
 
   branches: IBranchAddress[];
 
@@ -60,4 +59,50 @@ export interface IVerifyGSTNumberRequest {
 
 export interface IVerifyGSTNumberResponse extends Partial<ICompany> {
   readonly: unknown;
+}
+
+export interface ICreateCompanyRequest {
+  gstIn: string; 
+  legalName: string;
+  tradeName: string;
+
+  constitutionOfBusiness: ConstitutionOfBusiness;
+  taxPayerType: TaxPayerType;
+  status: CompanyStatus;
+
+  stateJurisdiction: string;
+  centerJurisdiction: string;
+
+  headOfficeAddress: string;
+  headOfficeSplitAddress: IAddress;
+
+  registrationDate: Date;
+
+  branches: IBranchAddress[];
+
+  natureOfBusiness: string[];
+}
+
+export interface IGetCompanyResponse {
+  _id: string;
+
+  gstIn: string; 
+  legalName: string;
+  tradeName: string;
+
+  constitutionOfBusiness: ConstitutionOfBusiness;
+  taxPayerType: TaxPayerType;
+  status: CompanyStatus;
+
+  stateJurisdiction: string;
+  centerJurisdiction: string;
+
+  headOfficeAddress: string;
+  headOfficeSplitAddress: IAddress;
+
+  registrationDate: Date;
+
+  branches: IBranchAddress[];
+
+  natureOfBusiness: string[];
 }

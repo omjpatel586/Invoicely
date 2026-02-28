@@ -2,11 +2,10 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { getAuthToken } from '../../libs/auth';
-import ScreenLoader from '../../views/components/loader';
-import { loginUserClient } from '../../views/utils/auth';
+import ScreenLoader from '../../../views/components/loader';
+import { loginUserClient } from '../../../views/utils/auth';
 import { signInWithGoogle } from './firebaseConfig';
 
 export default function LoginPage() {
@@ -21,22 +20,22 @@ export default function LoginPage() {
       await loginUserClient(userIdToken);
       setLoading(false);
       toast.success('Google Login Successful!');
-      router.push('/');
+      router.push('/dashboard/companies');
     } catch {
       toast.error('Google Login Failed!');
     }
   };
 
-  useEffect(() => {
-    const redirectToDashboardIfAlreadySignIn = async () => {
-      const token = await getAuthToken();
-      if (token) {
-        router.push('/');
-      }
-    };
+  // useEffect(() => {
+  //   const redirectToDashboardIfAlreadySignIn = async () => {
+  //     const token = await getAuthToken();
+  //     if (token) {
+  //       router.push('/');
+  //     }
+  //   };
 
-    redirectToDashboardIfAlreadySignIn();
-  }, [router]);
+  //   redirectToDashboardIfAlreadySignIn();
+  // }, [router]);
 
   if (loading) {
     return <ScreenLoader />;

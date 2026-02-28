@@ -1,11 +1,12 @@
-import * as apiInterfaces from '@invoicely/api-interfaces';
 // company.schema.ts
+import type { IAddress, IBranchAddress } from '@invoicely/api-interfaces';
 import {
   CompanyStatus,
   ConstitutionOfBusiness,
   TaxPayerType,
 } from '@invoicely/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsEnum, IsNotEmpty, IsString } from "class-validator";
 import { SchemaTypes } from 'mongoose';
 import { SoftDeletePlugin } from '.';
 import { BaseSchema } from './base.model';
@@ -61,55 +62,70 @@ export class BranchAddress {
 })
 export class Company extends BaseSchema {
   @Prop({ type: String, index: true })
+  @IsNotEmpty()
+  @IsString()
   gstIn: string;
 
   @Prop({ type: String, trim: true })
+    @IsNotEmpty()
+  @IsString()
   legalName: string;
 
   @Prop({ type: String, trim: true })
+    @IsNotEmpty()
+  @IsString()
   tradeName: string;
 
   @Prop({
     type: String,
-    enum: Object.values(ConstitutionOfBusiness),
+    enum: ConstitutionOfBusiness,
     default: null,
   })
+    @IsNotEmpty()
+  @IsEnum(ConstitutionOfBusiness)
   constitutionOfBusiness: ConstitutionOfBusiness;
 
   @Prop({
     type: String,
-    enum: Object.values(TaxPayerType),
+    enum: TaxPayerType,
     default: null,
   })
+    @IsNotEmpty()
+  @IsEnum(TaxPayerType)
   taxPayerType: TaxPayerType;
 
   @Prop({
     type: String,
-    enum: Object.values(CompanyStatus),
+    enum: CompanyStatus,
     default: CompanyStatus.ACTIVE,
   })
+    @IsNotEmpty()
+  @IsEnum(CompanyStatus)
   status: CompanyStatus;
 
   @Prop({ type: String, default: null })
+    @IsNotEmpty()
+  @IsString()
   stateJurisdiction: string;
 
   @Prop({ type: String, default: null })
+    @IsNotEmpty()
+  @IsString()
   centerJurisdiction: string;
 
   @Prop({ type: String, default: null })
+    @IsNotEmpty()
+  @IsString()
   headOfficeAddress: string;
 
   @Prop({ type: Address, default: {} })
-  headOfficeSplitAddress: apiInterfaces.IAddress;
+  headOfficeSplitAddress: IAddress;
 
   @Prop({ type: Date, default: null })
   registrationDate: Date;
 
-  @Prop({ type: Date, default: null })
-  lastUpdatedOn: Date;
-
   @Prop({ type: [BranchAddress], default: [] })
-  branches: apiInterfaces.IBranchAddress[];
+  branches: IBranchAddress[];
 
   @Prop({ type: [String], default: [] })
   natureOfBusiness: string[];

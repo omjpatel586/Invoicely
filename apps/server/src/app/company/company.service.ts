@@ -1,6 +1,7 @@
 import { ICompany } from '@invoicely/api-interfaces';
 import { CompanyStatus, ConstitutionOfBusiness, TaxPayerType } from '@invoicely/constants';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Company } from '../database/models/company.model';
@@ -8,15 +9,19 @@ import { RegisteredGSTVerificationService } from './utils/cashfree.service';
 
 @Injectable()
 export class CompanyService {
+  private isDevelopment: boolean;
+
   constructor(
-    @InjectModel(Company.name) private readonly companyModel: Model<Company>   
-    , private readonly cashfreeService: RegisteredGSTVerificationService) { }
-  
+    @InjectModel(Company.name) private readonly companyModel: Model<Company>
+    , private readonly cashfreeService: RegisteredGSTVerificationService, private readonly configService: ConfigService) {
+    this.isDevelopment = this.configService.get('NODE_ENV') === 'development';
+  }
+
   verifyGSTFormat(gstNumber: string): boolean {
     // Basic GST number validation logic
     const gstRegex =
       /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-    return gstRegex.test(gstNumber);
+    return this.isDevelopment ? true : gstRegex.test(gstNumber);
   }
 
   async verifyGSTNumber(gstNumber: string): Promise<Partial<ICompany>> {
@@ -75,10 +80,10 @@ export class CompanyService {
   }
 
   async getCompanyByGSTNumber(gstNumber: string) {
-    return await this.companyModel.findOne({gstIn:gstNumber}).lean();
+    return await this.companyModel.findOne({ gstIn: gstNumber }).lean();
   }
 
   async getCompaniesByUserId(userId: string) {
-    return await this.companyModel.find({userId}, "legalName gstIn registrationDate headOfficeAddress").sort({createdAt:-1}).lean();
+    return await this.companyModel.find({ userId }, "legalName gstIn registrationDate headOfficeAddress").sort({ createdAt: -1 }).lean();
   }
 }

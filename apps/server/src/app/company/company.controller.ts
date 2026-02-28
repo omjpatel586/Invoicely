@@ -19,20 +19,21 @@ export class CompanyController {
   }
 
   @Post('/user/company')
-  async createCompany(@Body() companyData: CreateCompanyDto) {
+  async createCompany(@Req() req: Request, @Body() companyData: CreateCompanyDto) {
     if (!this.companyService.verifyGSTFormat(companyData.gstIn)) {
       throw new BadRequestException('Invalid GST number format');
     }
 
-    const company = await this.companyService.getCompany(companyData.gstIn);
+    const company = await this.companyService.getCompanyByGSTNumber(companyData.gstIn);
 
     if (company) {
       throw new BadRequestException('Company already exists');
     }
 
-    await this.companyService.createCompany(companyData);
+    companyData.userId = req.headers.user._id.toString();
+    const companyDetails = await this.companyService.createCompany(companyData);
 
-    return { message: 'Company created successfully' };
+    return { message: 'Company created successfully', data: companyDetails };
   }
 
   @Get('/user/company/:id')
@@ -42,7 +43,7 @@ export class CompanyController {
 
   @Get('/user/companies')
   async getCompaniesByUserId(@Req() req: Request) {
-    const userId = req.headers.user._id;
+    const userId = req.headers.user._id.toString();
     return await this.companyService.getCompaniesByUserId(userId);
   }
 }
