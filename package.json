@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "server": "nx serve invoicely-backend",
-    "dev": "nx dev invoicely-frontend"
+    "server": "nx serve server",
+    "web": "nx dev web"
   },
   "private": true,
   "devDependencies": {

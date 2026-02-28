@@ -1,7 +1,7 @@
 [build]
-  command = "npx nx build invoicely-frontend"
-  publish = "dist/apps/invoicely-frontend/.next"
-  functions = "dist/apps/invoicely-frontend/.netlify/functions"
+  command = "npx nx build web"
+  publish = "dist/apps/web/.next"
+  functions = "dist/apps/web/.netlify/functions"
 
 [build.environment]
   NODE_VERSION = "22"

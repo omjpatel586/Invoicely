@@ -5,8 +5,8 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'apps/invoicely-backend/.env',
+      envFilePath: 'apps/server/.env',
     }),
   ],
 })
-export class EnvConfigModule {}
+export class EnvConfigModule { }

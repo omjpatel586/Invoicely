@@ -48,7 +48,7 @@ Invoicely transforms paperwork into productivity with:
 /INVOICELY  # Nx Monorepo Root
 
 ├── apps/
-│   ├── invoicely-backend/          # Backend Application (NestJS)
+│   ├── server/          # Backend Application (NestJS)
 │   │   └── src/
 │   │       ├── app.module.ts
 │   │       ├── main.ts
@@ -64,7 +64,7 @@ Invoicely transforms paperwork into productivity with:
 │   │           ├── vendor/
 │   │           ├── eway-bill/
 │   │           └── company/
-│   ├── invoicely-frontend/         # Frontend Application (Next.js, In Progress)
+│   ├── web/         # Frontend Application (Next.js, In Progress)
 │   │   └── src/
 │   │       └── ...
 │
@@ -98,15 +98,15 @@ Invoicely transforms paperwork into productivity with:
 pnpm install
 
 # Run backend app
-nx serve invoicely-backend
+nx serve server
 
 # Run frontend app (once available)
-nx dev invoicely-frontend
+nx dev web
 
 # Generate new module/service/controller for backend
-nx g @nrwl/nest:module <module-name> --project=invoicely-backend
-nx g @nrwl/nest:controller <controller-name> --project=invoicely-backend
-nx g @nrwl/nest:service <service-name> --project=invoicely-backend
+nx g @nrwl/nest:module <module-name> --project=server
+nx g @nrwl/nest:controller <controller-name> --project=server
+nx g @nrwl/nest:service <service-name> --project=server
 ⚠️ Make sure your MongoDB instance is running and .env variables are set for database connection.
 ```
 

@@ -10,7 +10,9 @@ export class CronService {
   async handleCron() {
     this.logger.log('Automatic Task running');
     await new Promise((resolve) => {
-      setTimeout(() => resolve, 10000)
+      setTimeout(() => {
+        resolve({});
+      }, 10000)
     });
     this.logger.log('Task Completed');
   }
