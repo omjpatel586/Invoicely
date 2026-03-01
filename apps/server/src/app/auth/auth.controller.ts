@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import express from 'express';
+import { SecurityGuard } from '../guards/auth.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login/google')
   async googleLogin(
@@ -15,6 +16,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @UseGuards(SecurityGuard)
   async logOut(@Res() res: express.Response) {
     return this.authService.logOut(res);
   }

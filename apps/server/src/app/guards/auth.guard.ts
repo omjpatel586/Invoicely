@@ -23,15 +23,21 @@ declare module 'express' {
 export class SecurityGuard implements CanActivate {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: express.Request = context.switchToHttp().getRequest();
-    const token = req.cookies['invoicelyAppAuthToken'];
+    let token = req.headers.authorization;
 
     if (!token) {
       throw new UnauthorizedException('Missing authentication token');
     }
+
+    if (!token.includes('Bearer')) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    token = token.split(' ')[1];
 
     const decoded = JwtHelperService.verifyToken(token);
 

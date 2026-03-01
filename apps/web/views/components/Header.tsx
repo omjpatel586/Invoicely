@@ -24,7 +24,9 @@ const Header = () => {
     profile:
       user?.profile || 'https://avatars.githubusercontent.com/u/119939918?v=4',
   };
+  const token = localStorage.getItem('invoicelyAppAuthToken') as string;
 
+  const isLoggedIn = !!user;
   const windowSize = useWindowSize();
 
   useEffect(() => {
@@ -36,7 +38,11 @@ const Header = () => {
   const handleSidebar = () => setSidebarOpen(!sidebarOpen);
   const handleLogoutClick = async () => {
     dispatch(setUser(null));
-    await logOutUserClient();
+    await logOutUserClient(token);
+    localStorage.clear();
+    redirect('/auth/signin');
+  };
+  const handleLoginClick = async () => {
     redirect('/auth/signin');
   };
 
@@ -47,7 +53,7 @@ const Header = () => {
         <UserMenu
           handleLogoutClick={handleLogoutClick}
           user={userDetails}
-          isLoggedIn={!!user}
+          isLoggedIn={isLoggedIn}
         />
       </>
     );
@@ -81,7 +87,9 @@ const Header = () => {
             <>
               <Sidebar
                 handleLogoutClick={handleLogoutClick}
+                handleLoginClick={handleLoginClick}
                 sidebarOpen={sidebarOpen}
+                isLoggedIn={isLoggedIn}
               />
             </>
           )}
