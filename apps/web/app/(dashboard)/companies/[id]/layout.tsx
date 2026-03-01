@@ -37,27 +37,27 @@ export default function CompanyLayout({
     {
       name: 'Overview',
       icon: LayoutDashboard,
-      href: `/dashboard/companies/${companyId}`,
+      href: `/companies/${companyId}`,
     },
     {
       name: 'Products',
       icon: Package,
-      href: `/dashboard/companies/${companyId}/products`,
+      href: `/companies/${companyId}/products`,
     },
     {
       name: 'Vendors',
       icon: Users,
-      href: `/dashboard/companies/${companyId}/vendors`,
+      href: `/companies/${companyId}/vendors`,
     },
     {
       name: 'Sales Bills',
       icon: ReceiptText,
-      href: `/dashboard/companies/${companyId}/sales-bills`,
+      href: `/companies/${companyId}/sales-bills`,
     },
     {
       name: 'E-Way Bills',
       icon: Truck,
-      href: `/dashboard/companies/${companyId}/eway-bills`,
+      href: `/companies/${companyId}/eway-bills`,
     },
   ];
 

@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { API_BACKEND_URL } from '../../libs/axiosInstance';
 
-export const NEXT_API_URL = '/api';
-
 export const loginUserClient = async (
-  // dispatch: AppDispatch,
   idToken: string
 ) => {
   return axios.post(
@@ -12,32 +9,13 @@ export const loginUserClient = async (
     {
       idToken,
     },
-    { withCredentials: true } // ✅ REQUIRED
   );
-  // dispatch(setUser(res.data.data));
 };
 
-export const loginUserNextJSClient = async (
-  // dispatch: AppDispatch,
-  idToken: string
-) => {
+export const logOutUserClient = async (token: string) => {
   await axios.post(
-    `${NEXT_API_URL}/auth`,
-    {
-      idToken,
-    },
-    { withCredentials: true } // ✅ REQUIRED
+    `${API_BACKEND_URL}/auth/logout`,
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
   );
-  // dispatch(setUser(res.data.data));
 };
-
-export const logOutUserClient = async () =>
-  // dispatch: AppDispatch,
-  {
-    await axios.post(
-      `${API_BACKEND_URL}/auth/logout`,
-      {},
-      { withCredentials: true } // ✅ REQUIRED
-    );
-    // dispatch(setUser(res.data.data));
-  };
