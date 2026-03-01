@@ -30,17 +30,6 @@ export default function LoginPage() {
     }
   };
 
-  // useEffect(() => {
-  //   const redirectToDashboardIfAlreadySignIn = async () => {
-  //     const token = await getAuthToken();
-  //     if (token) {
-  //       router.push('/');
-  //     }
-  //   };
-
-  //   redirectToDashboardIfAlreadySignIn();
-  // }, [router]);
-
   if (loading) {
     return <ScreenLoader />;
   }
