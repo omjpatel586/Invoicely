@@ -1,6 +1,6 @@
 [build]
   command = "npx nx build web"
-  publish = "dist/apps/web/.next"
+  publish = "apps/web/.next"
   functions = "dist/apps/web/.netlify/functions"
 
 [build.environment]
