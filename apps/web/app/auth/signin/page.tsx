@@ -17,25 +17,18 @@ export default function LoginPage() {
       const result = await signInWithGoogle();
       const userIdToken = await result.user.getIdToken();
       setLoading(true);
-      await loginUserClient(userIdToken);
-      setLoading(false);
-      toast.success('Google Login Successful!');
-      router.push('/dashboard/companies');
+      const res = await loginUserClient(userIdToken);
+      if (res.data.data?.authToken) {
+        localStorage.setItem('invoicelyAppAuthToken', res.data.data.authToken);
+        setLoading(false);
+        toast.success('Google Login Successful!');
+        return router.push('/companies');
+      }
+      throw new Error('Failed');
     } catch {
       toast.error('Google Login Failed!');
     }
   };
-
-  // useEffect(() => {
-  //   const redirectToDashboardIfAlreadySignIn = async () => {
-  //     const token = await getAuthToken();
-  //     if (token) {
-  //       router.push('/');
-  //     }
-  //   };
-
-  //   redirectToDashboardIfAlreadySignIn();
-  // }, [router]);
 
   if (loading) {
     return <ScreenLoader />;

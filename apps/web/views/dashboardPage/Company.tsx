@@ -22,6 +22,7 @@ import {
 } from '../utils/company';
 
 export default function Company() {
+  const token = localStorage.getItem('invoicelyAppAuthToken') as string;
   const [list, setList] = useState<IGetCompanyResponse[]>([]);
 
   // modal
@@ -33,7 +34,7 @@ export default function Company() {
 
   useEffect(() => {
     setLoading(true);
-    getUserCompanies().then((res) => {
+    getUserCompanies(token).then((res) => {
       setLoading(false);
       setList(res.data);
     });
@@ -55,7 +56,7 @@ export default function Company() {
 
     setButtonLoading(true);
     try {
-      const res = await verifyGSTNumber({ gstNumber: gstIn });
+      const res = await verifyGSTNumber({ gstNumber: gstIn }, token);
 
       const data = res.data;
 
@@ -80,23 +81,26 @@ export default function Company() {
 
     setButtonLoading(true);
     try {
-      const res = await createCompany({
-        gstIn: gstIn,
-        legalName: companyDetails?.legalName || '',
-        tradeName: companyDetails?.tradeName || '',
-        constitutionOfBusiness:
-          companyDetails?.constitutionOfBusiness as ConstitutionOfBusiness,
-        headOfficeAddress: companyDetails?.headOfficeAddress || '',
-        headOfficeSplitAddress:
-          companyDetails?.headOfficeSplitAddress as IAddress,
-        branches: companyDetails?.branches || [],
-        registrationDate: companyDetails?.registrationDate || new Date(),
-        stateJurisdiction: companyDetails?.stateJurisdiction || '',
-        centerJurisdiction: companyDetails?.centerJurisdiction || '',
-        status: companyDetails?.status || CompanyStatus.ACTIVE,
-        natureOfBusiness: companyDetails?.natureOfBusiness || [],
-        taxPayerType: companyDetails?.taxPayerType || TaxPayerType.REGULAR,
-      });
+      const res = await createCompany(
+        {
+          gstIn: gstIn,
+          legalName: companyDetails?.legalName || '',
+          tradeName: companyDetails?.tradeName || '',
+          constitutionOfBusiness:
+            companyDetails?.constitutionOfBusiness as ConstitutionOfBusiness,
+          headOfficeAddress: companyDetails?.headOfficeAddress || '',
+          headOfficeSplitAddress:
+            companyDetails?.headOfficeSplitAddress as IAddress,
+          branches: companyDetails?.branches || [],
+          registrationDate: companyDetails?.registrationDate || new Date(),
+          stateJurisdiction: companyDetails?.stateJurisdiction || '',
+          centerJurisdiction: companyDetails?.centerJurisdiction || '',
+          status: companyDetails?.status || CompanyStatus.ACTIVE,
+          natureOfBusiness: companyDetails?.natureOfBusiness || [],
+          taxPayerType: companyDetails?.taxPayerType || TaxPayerType.REGULAR,
+        },
+        token
+      );
 
       const created: IGetCompanyResponse = res.data;
       toast.success(res.message);
@@ -168,7 +172,7 @@ export default function Company() {
           <div className="grid grid-cols-1 gap-4 md:hidden">
             {list.map((c) => (
               <Link
-                href={`/dashboard/companies/${c._id}`}
+                href={`/companies/${c._id}`}
                 key={c._id}
                 className="group block bg-white dark:bg-[#1a1a1a] rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm active:scale-[0.98] transition-all hover:border-indigo-500/50"
               >

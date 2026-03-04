@@ -84,28 +84,14 @@ export class AuthService {
       this.JWT_EXPIRY
     );
 
-    res.cookie('invoicelyAppAuthToken', newAuthToken, {
-      httpOnly: true,
-      secure: this.isProduction,
-      sameSite: this.isProduction ? 'none' : 'lax',
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-      path: '/',
-    });
-
     return res.status(HttpStatus.CREATED).json({
       statusCode: HttpStatus.CREATED,
       message: 'Google Login Successful',
-      data: response,
+      data: { ...response, authToken: newAuthToken },
     });
   }
 
   async logOut(res: express.Response) {
-    res.clearCookie('invoicelyAppAuthToken', {
-      httpOnly: true,
-      secure: this.isProduction,
-      sameSite: this.isProduction ? 'none' : 'lax',
-      path: '/',
-    });
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Logout Successful',

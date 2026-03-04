@@ -12,8 +12,9 @@ export default function CompanyView() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        const token = localStorage.getItem('invoicelyAppAuthToken') as string;
         dispatch(setLoading(true));
-        const userDetails = await fetchUserDetails();
+        const userDetails = await fetchUserDetails(token);
         dispatch(setUser(userDetails));
       } catch (err) {
         console.error('Failed to fetch user:', err);
