@@ -6,7 +6,7 @@ import { Cron } from '@nestjs/schedule';
 export class CronService {
   private readonly logger = new Logger(CronService.name);
 
-  @Cron('*/10 * * * *')
+  @Cron('*/1 * * * *')
   async handleCron() {
     this.logger.log('Automatic Task running');
     await new Promise((resolve) => {
