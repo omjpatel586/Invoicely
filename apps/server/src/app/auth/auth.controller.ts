@@ -9,10 +9,10 @@ export class AuthController {
 
   @Post('login/google')
   async googleLogin(
-    @Body('idToken') idToken: string,
+    @Body('accessToken') accessToken: string,
     @Res() res: express.Response
   ) {
-    return this.authService.googleLogin(idToken, res);
+    return this.authService.googleLogin(accessToken, res);
   }
 
   @Post('logout')

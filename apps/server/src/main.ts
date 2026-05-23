@@ -11,7 +11,7 @@ import { AppModule } from './app/app.module';
 
 async function startServer() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const globalPrefix = 'api';
+  const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
   app.use(cookieParser());
   const isProduction = process.env.NODE_ENV === 'production';
@@ -20,7 +20,7 @@ async function startServer() {
   app.enableCors({
     origin: isProduction ? REACT_APP_URL : REACT_LOCAL_URL,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
   const port = process.env.PORT || 5000;

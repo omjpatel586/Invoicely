@@ -61,7 +61,7 @@ Standard NestJS errors can look like:
 
 `POST /api/auth/login/google`
 
-Authenticates the user with a Firebase Google ID token and returns an app auth token.
+Authenticates the user with a Google OAuth access token, fetches the Google user profile on the server, and returns an app auth token.
 
 Auth required: `No`
 
@@ -69,7 +69,7 @@ Request body:
 
 ```json
 {
-  "idToken": "FIREBASE_GOOGLE_ID_TOKEN"
+  "accessToken": "GOOGLE_OAUTH_ACCESS_TOKEN"
 }
 ```
 

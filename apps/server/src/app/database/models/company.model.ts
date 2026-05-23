@@ -67,12 +67,12 @@ export class Company extends BaseSchema {
   gstIn: string;
 
   @Prop({ type: String, trim: true })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   legalName: string;
 
   @Prop({ type: String, trim: true })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   tradeName: string;
 
@@ -81,7 +81,7 @@ export class Company extends BaseSchema {
     enum: ConstitutionOfBusiness,
     default: null,
   })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsEnum(ConstitutionOfBusiness)
   constitutionOfBusiness: ConstitutionOfBusiness;
 
@@ -90,7 +90,7 @@ export class Company extends BaseSchema {
     enum: TaxPayerType,
     default: null,
   })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsEnum(TaxPayerType)
   taxPayerType: TaxPayerType;
 
@@ -99,22 +99,22 @@ export class Company extends BaseSchema {
     enum: CompanyStatus,
     default: CompanyStatus.ACTIVE,
   })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsEnum(CompanyStatus)
   status: CompanyStatus;
 
   @Prop({ type: String, default: null })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   stateJurisdiction: string;
 
   @Prop({ type: String, default: null })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   centerJurisdiction: string;
 
   @Prop({ type: String, default: null })
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   headOfficeAddress: string;
 

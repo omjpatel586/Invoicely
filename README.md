@@ -52,7 +52,7 @@ Invoicely transforms paperwork into productivity with:
 │   │   └── src/
 │   │       ├── app.module.ts
 │   │       ├── main.ts
-│   │       └── modules/           # Feature Modules
+│   │       └── app/           # Feature Modules
 │   │           ├── invoice/
 │   │           │   ├── invoice.controller.ts
 │   │           │   ├── invoice.service.ts
@@ -64,9 +64,26 @@ Invoicely transforms paperwork into productivity with:
 │   │           ├── vendor/
 │   │           ├── eway-bill/
 │   │           └── company/
+│   │           └── database/
+│   │           └──└── models/
+│   │           └──└──└── index.ts
+│   │           └──└──└── company.model.ts
+│   │           └──└──└── base.model.ts
+│   │           └──└── database.module.ts/ # connection of database
 │   ├── web/         # Frontend Application (Next.js, In Progress)
-│   │   └── src/
-│   │       └── ...
+│   │   └── app/ # Application Main Page Routing
+│   │       └── (dashboard) # Protected route
+│   │       └── └── page.tsx
+│   │       └── └── layout.tsx
+│   │       └── └── companies
+│   │       └── └── └── [id]
+│   │       └── └── └── └── vendors
+│   │       └── └── └── └── └── page.tsx
+│   │       └── └── └── └── page.tsx
+│   │       └── └── └── page.tsx
+│   │       views/ # All common components logic, store, utils
+│   │       public/ # All media such as images, css, js
+│   │       libs/ # axios instance, api body defined, toast setup
 │
 ├── libs/ or shared/                # Shared modules (utilities, DTOs, interfaces, constants)
 │   ├── constants/
