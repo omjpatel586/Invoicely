@@ -2,12 +2,12 @@ import axios from 'axios';
 import { API_BACKEND_URL } from '../../libs/axiosInstance';
 
 export const loginUserClient = async (
-  idToken: string
+  accessToken: string
 ) => {
   return axios.post(
     `${API_BACKEND_URL}/auth/login/google`,
     {
-      idToken,
+      accessToken,
     },
   );
 };

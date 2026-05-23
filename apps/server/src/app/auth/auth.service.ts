@@ -1,11 +1,22 @@
+import { HttpService } from '@nestjs/axios';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import express from 'express';
 import { Model } from 'mongoose';
+import { firstValueFrom } from 'rxjs';
 import { JwtHelperService } from '../../helper/utils/jwt.helper';
 import { User } from '../database/models/user.model';
-import { FirebaseService } from '../firebase/firebase.service';
+
+interface GoogleUserInfo {
+  sub: string;
+  email?: string;
+  email_verified?: boolean;
+  name?: string;
+  given_name?: string;
+  family_name?: string;
+  picture?: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -17,7 +28,7 @@ export class AuthService {
   public readonly isProduction: boolean;
 
   constructor(
-    private readonly firebaseService: FirebaseService,
+    private readonly httpService: HttpService,
     private readonly configService: ConfigService,
     @InjectModel(User.name) private readonly userModel: Model<User>
   ) {
@@ -32,26 +43,44 @@ export class AuthService {
     this.isProduction = this.NODE_ENV === 'production';
   }
 
-  async googleLogin(idToken: string, res: express.Response) {
-    // Verify the Google ID token sent from frontend
-    const decodedToken = await this.firebaseService.firebaseApp
-      .auth()
-      .verifyIdToken(idToken);
-
-    if (!decodedToken) {
-      throw new BadRequestException('Token verification failed');
+  async googleLogin(accessToken: string, res: express.Response) {
+    if (!accessToken) {
+      throw new BadRequestException('Access token is required');
     }
 
-    const email = decodedToken.email;
-    const name = decodedToken.name;
-    const picture = decodedToken.picture;
+    const { data: googleUser } = await firstValueFrom(
+      this.httpService.get<GoogleUserInfo>(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+    );
 
-    const user = await this.userModel.findOne({ email });
+    if (!googleUser?.email) {
+      throw new BadRequestException('Google login failed');
+    }
+
+    const email = googleUser.email;
+    const firstName =
+      googleUser.given_name ||
+      googleUser.name?.split(' ')[0] ||
+      email.split('@')[0];
+    const lastName =
+      googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || '';
+    const picture = googleUser.picture || '';
+
+    const user = await this.userModel.findOne({ $or: [{ email }, { id: googleUser.sub }] });
 
     const response: Partial<User> = {};
 
     if (user) {
-      user.google = decodedToken;
+      user.google = googleUser;
+      user.firstName = user.firstName || firstName;
+      user.lastName = user.lastName || lastName;
+      user.profile = user.profile || picture;
       await user.save();
       response._id = user._id;
       response.firstName = user.firstName;
@@ -60,11 +89,11 @@ export class AuthService {
       response.profile = user.profile;
     } else {
       const newUser = new this.userModel({
-        firstName: name.split(' ')[0],
-        lastName: name.split(' ').slice(1).join('') || '',
+        firstName,
+        lastName,
         email,
         profile: picture,
-        google: decodedToken,
+        google: googleUser,
       });
       await newUser.save();
       response._id = newUser._id;

@@ -1,13 +1,25 @@
 import { ModelDefinition } from '@nestjs/mongoose';
 import { CallbackWithoutResultAndOptionalError, Schema } from 'mongoose';
 import { BaseSchema } from './base.model';
+import { Bill, BillSchema } from './bill.model';
 import { Company, CompanySchema } from './company.model';
+import { Product, ProductSchema } from './product.model';
 import { User, UserSchema } from './user.model';
+import { Vendor, VendorSchema } from './vendor.model';
 
 export const Schemas: ModelDefinition[] = [
   { name: User.name, schema: UserSchema, collection: User.name },
   { name: Company.name, schema: CompanySchema, collection: Company.name },
+  { name: Product.name, schema: ProductSchema, collection: Product.name },
+  { name: Vendor.name, schema: VendorSchema, collection: Vendor.name },
+  { name: Bill.name, schema: BillSchema, collection: Bill.name },
 ];
+
+export * from './bill.model';
+export * from './company.model';
+export * from './product.model';
+export * from './user.model';
+export * from './vendor.model';
 
 export interface ThisType {
   getFilter: () => Record<string, object>;
@@ -16,36 +28,26 @@ export interface ThisType {
 
 // ---------------- Soft Delete Plugin ----------------
 export function SoftDeletePlugin(schema: Schema) {
-  // Add soft delete fields if not already added
-  if (!schema.path('isDeleted')) {
-    schema.add({
-      isDeleted: { type: Boolean, default: false },
-      deletedAt: { type: Date, default: null },
-    });
-  }
-
   // ---------------- Pre-find hooks ----------------
   const preQuery = function (
     this: ThisType,
-    next: CallbackWithoutResultAndOptionalError
   ) {
     // Automatically filter out soft deleted docs
     if (!this.getFilter().includeDeleted) {
       this.where({ isDeleted: false });
     }
-    next();
   };
 
   // Apply pre-hook to all query types matching regex
   // This will match: find, findOne, findOneAndUpdate, update, updateOne, updateMany, count, countDocuments, etc.
-  schema.pre(/^(find|count|update|delete)/i, preQuery);
+  schema.pre(/^(find|count|update|delete)/i, preQuery as unknown as CallbackWithoutResultAndOptionalError);
 
   // ---------------- Aggregation hook -----------------
-  schema.pre('aggregate', function (this, next) {
-    // Add isDeleted: false match to aggregation pipelines
-    this.pipeline().unshift({ $match: { isDeleted: false } });
-    next();
-  });
+  // schema.pre('aggregate', function (this, ops: Record<string, unknown>) {
+  //   // Add isDeleted: false match to aggregation pipelines
+  //   this.pipeline().unshift({ $match: { isDeleted: false } });
+  //   next();
+  // });
 
   // ---------------- Instance method ----------------
   schema.methods.softDelete = async function () {

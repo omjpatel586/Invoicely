@@ -1,5 +1,6 @@
 'use client';
 
+import { GoogleAuthProvider } from 'firebase/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -15,9 +16,15 @@ export default function LoginPage() {
   const signIn = async () => {
     try {
       const result = await signInWithGoogle();
-      const userIdToken = await result.user.getIdToken();
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const accessToken = credential?.accessToken;
+
+      if (!accessToken) {
+        throw new Error('Missing Google access token');
+      }
+
       setLoading(true);
-      const res = await loginUserClient(userIdToken);
+      const res = await loginUserClient(accessToken);
       if (res.data.data?.authToken) {
         localStorage.setItem('invoicelyAppAuthToken', res.data.data.authToken);
         setLoading(false);

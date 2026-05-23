@@ -4,12 +4,15 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { BillModule } from './bill/bill.module';
 import { CompanyModule } from './company/company.module';
 import { EnvConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
+import { ProductModule } from './product/product.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
+import { VendorModule } from './vendor/vendor.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import { UserProfileModule } from './user-profile/user-profile.module';
     AuthModule,
     UserProfileModule,
     CompanyModule,
+    ProductModule,
+    VendorModule,
+    BillModule,
     ScheduleModule.forRoot()
   ],
   controllers: [AppController],
