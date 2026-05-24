@@ -74,6 +74,12 @@ export default function RootLayout({
                 duration: 3000,
               }}
             />
+
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665533093238512"
+              crossOrigin="anonymous"
+            ></script>
           </ReduxProvider>
         </ThemeProvider>
       </body>
