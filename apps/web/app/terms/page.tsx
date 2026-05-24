@@ -1,19 +1,39 @@
 const sections = [
   {
-    title: 'Service Scope',
-    body: 'Invoicely is intended to support invoicing, billing workflows, business record management, and related operational features. This page currently provides placeholder terms content and will be replaced with final legal terms before public launch.',
+    title: 'Acceptance',
+    body: 'By creating an account and using Invoicely, you agree to these terms. If you are using the platform on behalf of a business, you confirm you have the authority to bind that business to these terms.',
   },
   {
-    title: 'User Responsibilities',
-    body: 'Users are expected to provide accurate account and business information, maintain secure access to their login credentials, and use the product in accordance with applicable commercial and regulatory requirements.',
+    title: 'What Invoicely provides',
+    body: 'Invoicely is a business tool — not a licensed accounting firm or tax advisor. The platform helps you generate GST-compliant invoices and manage business records, but you remain responsible for verifying the accuracy of your filings and complying with applicable tax laws.',
   },
   {
-    title: 'Availability and Product Changes',
-    body: 'Features, workflows, integrations, and availability may evolve as the platform develops. Product previews, early access features, and coming-soon messaging should not be interpreted as guaranteed launch commitments until formally published.',
+    title: 'Your account',
+    body: 'You sign in using Google OAuth. You are responsible for all activity that takes place under your account. Do not share your login credentials. Notify us immediately if you suspect unauthorised access.',
   },
   {
-    title: 'Compliance and Records',
-    body: 'Businesses remain responsible for reviewing and validating their invoices, compliance outputs, and operational records. Invoicely is designed to support process quality, but final business accountability remains with the user.',
+    title: 'Your data',
+    body: 'You own the business data you enter into Invoicely — your products, vendors, and invoices belong to you. We do not claim any rights over your content. You grant us permission to store and process it solely to provide the service.',
+  },
+  {
+    title: 'Acceptable use',
+    body: 'Invoicely is intended for legitimate business use only. You must not use the platform to generate fraudulent invoices, misrepresent GST information, or engage in any activity that violates Indian law. Accounts found in violation may be suspended without notice.',
+  },
+  {
+    title: 'Availability',
+    body: 'We aim to keep Invoicely available at all times, but we cannot guarantee uninterrupted access. Scheduled maintenance, third-party outages, or unforeseen issues may occasionally affect the service. We are not liable for losses resulting from downtime.',
+  },
+  {
+    title: 'Changes to the service',
+    body: 'We may update or modify the Invoicely service from time to time. We will notify you of any material changes to these terms or the service. Your continued use of the service after such changes constitutes your acceptance of the updated terms.',
+  },
+  {
+    title: 'Limitation of liability',
+    body: 'Invoicely is provided as-is. To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages arising from your use of the platform, including data loss or inaccurate tax filings.',
+  },
+  {
+    title: 'Governing law',
+    body: 'These terms are governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in Surat, Gujarat.',
   },
 ];
 
@@ -27,8 +47,7 @@ export default function TermsPage() {
         Terms for using Invoicely
       </h1>
       <p className="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300">
-        This page currently contains professional placeholder content for early
-        product presentation. It is not the final legal terms document.
+        **Effective date:** May 24, 2026
       </p>
 
       <div className="mt-8 space-y-5">
@@ -44,6 +63,10 @@ export default function TermsPage() {
           </section>
         ))}
       </div>
+
+      <p className="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300">
+        **Questions?** Contact us at connect.omjpatel@gmail.com
+      </p>
     </div>
   );
 }
