@@ -28,11 +28,11 @@ export const metadata = {
     title: 'Invoicely – Smart Invoice Generator',
     description:
       'Generate professional invoices instantly. Invoicely makes invoicing simple, fast, and secure for businesses.',
-    url: 'https://invoicely-eta.vercel.app/',
+    url: 'https://www.useinvoicely.cloud/',
     siteName: 'Invoicely',
     images: [
       {
-        url: '/assets/logo.png',
+        url: 'https://www.useinvoicely.cloud/assets/logo.png',
         width: 1200,
         height: 630,
         alt: 'Invoicely Logo',
@@ -42,9 +42,9 @@ export const metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/assets/logo.png',
-    shortcut: '/assets/logo.png',
-    apple: '/assets/logo.png',
+    icon: 'https://www.useinvoicely.cloud/assets/logo.png',
+    shortcut: 'https://www.useinvoicely.cloud/assets/logo.png',
+    apple: 'https://www.useinvoicely.cloud/assets/logo.png',
   },
   other: {
     'google-adsense-account': 'ca-pub-1665533093238512',

@@ -71,11 +71,11 @@ export default function LoginPage() {
 
         <p className="text-xs text-gray-400 mt-8">
           By signing in you agree to our{' '}
-          <a href="/terms" className="underline hover:text-blue-600">
+          <a href="/terms-of-service" className="underline hover:text-blue-600">
             Terms
           </a>{' '}
           &{' '}
-          <a href="/privacy" className="underline hover:text-blue-600">
+          <a href="/privacy-policy" className="underline hover:text-blue-600">
             Privacy Policy
           </a>
           .

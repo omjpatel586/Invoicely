@@ -35,16 +35,10 @@ const Footer = () => {
         </a>
       </div>
       <div className="flex flex-row flex-wrap justify-center items-center gap-4">
-        <a
-          href="mailto:connect.omjpatel@gmail.com"
-          className="font-semibold hover:underline tracking-widest"
-        >
-          Contact Us
-        </a>
-      </div>
-      <div className="flex flex-row flex-wrap justify-center items-center gap-4">
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
+        <a href="/about-us">About Us</a>
+        <a href="/contact-us">Contact Us</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms-of-service">Terms of Service</a>
       </div>
     </footer>
   );

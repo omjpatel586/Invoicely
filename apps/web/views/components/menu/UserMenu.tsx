@@ -62,10 +62,10 @@ const UserMenu = ({
               </div>
             </div>
             <div className="flex flex-col gap-2 p-4 border-b">
-              <a href="/privacy" className="text-sm hover:underline">
+              <a href="/privacy-policy" className="text-sm hover:underline">
                 Privacy Policy
               </a>
-              <a href="/terms" className="text-sm hover:underline">
+              <a href="/terms-of-service" className="text-sm hover:underline">
                 Terms of Service
               </a>
             </div>
