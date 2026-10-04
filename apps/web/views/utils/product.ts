@@ -4,41 +4,18 @@ import {
   IResponse,
 } from '@invoicely/api-interfaces';
 import { clientAxios } from '../../libs/axiosInstance';
+import { DecimalApiValue, normalizeDecimal } from '@invoicely/utils';
 
 export type IUpdateProductRequest = Partial<ICreateProductRequest>;
 
 type ProductApiShape = Omit<IProduct, 'unitPrice'> & {
-  unitPrice:
-    | string
-    | number
-    | null
-    | {
-        $numberDecimal?: string;
-      };
+  unitPrice: DecimalApiValue;
 };
 
 const productRoute = (companyId: string, productId?: string) =>
   productId
     ? `/companies/${companyId}/products/${productId}`
     : `/companies/${companyId}/products`;
-
-const normalizeDecimal = (
-  value: ProductApiShape['unitPrice']
-): string => {
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  if (typeof value === 'number') {
-    return value.toString();
-  }
-
-  if (value && typeof value === 'object' && '$numberDecimal' in value) {
-    return value.$numberDecimal || '0';
-  }
-
-  return '0';
-};
 
 const normalizeProduct = (product: ProductApiShape): IProduct => ({
   ...product,

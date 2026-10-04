@@ -1,9 +1,17 @@
 'use client';
 
 import { ICreateProductRequest, IProduct } from '@invoicely/api-interfaces';
-import { GstSlab, ProductUnit } from '@invoicely/constants';
+import {
+  GST_SLABS,
+  GstSlab,
+  MONEY_PATTERN,
+  PRODUCT_UNIT_LABELS,
+  PRODUCT_UNITS,
+  ProductUnit,
+} from '@invoicely/constants';
 import { X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import { useFormErrors } from '../hooks/useFormErrors';
 
 interface ProductFormModalProps {
   initialProduct: IProduct | null;
@@ -15,6 +23,7 @@ interface ProductFormModalProps {
 
 interface FormErrors {
   name?: string;
+  description?: string;
   hsnCode?: string;
   gstSlab?: string;
   unit?: string;
@@ -30,20 +39,37 @@ const defaultValues: ICreateProductRequest = {
   unitPrice: '',
 };
 
-const gstOptions = [
-  GstSlab.ZERO,
-  GstSlab.FIVE,
-  GstSlab.TWELVE,
-  GstSlab.EIGHTEEN,
-  GstSlab.TWENTY_EIGHT,
-];
+const getProductErrors = (values: ICreateProductRequest): FormErrors => {
+  const errors: FormErrors = {};
 
-const unitOptions = [
-  ProductUnit.KG,
-  ProductUnit.LITRE,
-  ProductUnit.GRAM,
-  ProductUnit.PCS,
-];
+  if (!values.name?.trim()) {
+    errors.name = 'Product name is required';
+  }
+
+  if (!values.description?.trim()) {
+    errors.description = 'Description is required';
+  }
+
+  if (!values.hsnCode?.trim()) {
+    errors.hsnCode = 'HSN code is required';
+  }
+
+  if (values.gstSlab === null || values.gstSlab === undefined) {
+    errors.gstSlab = 'GST slab is required';
+  }
+
+  if (!values.unit) {
+    errors.unit = 'Unit is required';
+  }
+
+  if (!values.unitPrice.trim()) {
+    errors.unitPrice = 'Unit price is required';
+  } else if (!MONEY_PATTERN.test(values.unitPrice.trim())) {
+    errors.unitPrice = 'Enter a valid price such as 120.50';
+  }
+
+  return errors;
+};
 
 export function ProductFormModal({
   initialProduct,
@@ -53,9 +79,11 @@ export function ProductFormModal({
   onSubmit,
 }: ProductFormModalProps) {
   const [values, setValues] = useState<ICreateProductRequest>(defaultValues);
-  const [errors, setErrors] = useState<FormErrors>({});
-
   const isEditMode = useMemo(() => !!initialProduct, [initialProduct]);
+  const { visibleErrors, hasErrors, markTouched, resetTouched } = useFormErrors(
+    getProductErrors(values),
+    isEditMode
+  );
 
   useEffect(() => {
     if (!isOpen) {
@@ -71,46 +99,17 @@ export function ProductFormModal({
         unit: initialProduct.unit,
         unitPrice: initialProduct.unitPrice,
       });
-      setErrors({});
+      resetTouched();
       return;
     }
 
     setValues(defaultValues);
-    setErrors({});
-  }, [initialProduct, isOpen]);
+    resetTouched();
+  }, [initialProduct, isOpen, resetTouched]);
 
   if (!isOpen) {
     return null;
   }
-
-  const validate = () => {
-    const nextErrors: FormErrors = {};
-
-    if (!values.name?.trim()) {
-      nextErrors.name = 'Product name is required';
-    }
-
-    if (!values.hsnCode?.trim()) {
-      nextErrors.hsnCode = 'HSN code is required';
-    }
-
-    if (!values.gstSlab) {
-      nextErrors.gstSlab = 'GST slab is required';
-    }
-
-    if (!values.unit) {
-      nextErrors.unit = 'Unit is required';
-    }
-
-    if (!values.unitPrice.trim()) {
-      nextErrors.unitPrice = 'Unit price is required';
-    } else if (!/^\d+(\.\d{1,2})?$/.test(values.unitPrice.trim())) {
-      nextErrors.unitPrice = 'Enter a valid price such as 120.50';
-    }
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
-  };
 
   const handleChange = (
     field: keyof ICreateProductRequest,
@@ -120,18 +119,19 @@ export function ProductFormModal({
       ...previous,
       [field]: value,
     }));
+    markTouched(field);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!validate()) {
+    if (hasErrors) {
       return;
     }
 
     onSubmit({
       name: values.name.trim(),
-      description: values.description?.trim() || '',
+      description: values.description?.trim(),
       hsnCode: values.hsnCode?.trim() || '',
       gstSlab: values.gstSlab,
       unit: values.unit,
@@ -165,8 +165,8 @@ export function ProductFormModal({
             onSubmit={handleSubmit}
             className="max-h-[calc(100vh-10rem)] overflow-y-auto p-6"
           >
-            <div className="grid gap-5 md:grid-cols-2">
-              <div className="md:col-span-2">
+            <div className="grid gap-5 minMd:grid-cols-2">
+              <div className="minMd:col-span-2">
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Product Name *
                 </label>
@@ -176,14 +176,16 @@ export function ProductFormModal({
                   placeholder="e.g. Basmati Rice"
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 />
-                {errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                {visibleErrors.name && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {visibleErrors.name}
+                  </p>
                 )}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="minMd:col-span-2">
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Description
+                  Description *
                 </label>
                 <textarea
                   value={values.description ?? ''}
@@ -191,9 +193,14 @@ export function ProductFormModal({
                     handleChange('description', event.target.value)
                   }
                   rows={3}
-                  placeholder="Optional product description"
+                  placeholder="e.g. Premium long grain rice"
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 />
+                {visibleErrors.description && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {visibleErrors.description}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -208,8 +215,10 @@ export function ProductFormModal({
                   placeholder="e.g. 100630"
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 />
-                {errors.hsnCode && (
-                  <p className="mt-2 text-sm text-red-600">{errors.hsnCode}</p>
+                {visibleErrors.hsnCode && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {visibleErrors.hsnCode}
+                  </p>
                 )}
               </div>
 
@@ -223,21 +232,23 @@ export function ProductFormModal({
                     handleChange(
                       'gstSlab',
                       event.target.value
-                        ? (event.target.value as GstSlab)
+                        ? (Number(event.target.value) as GstSlab)
                         : null
                     )
                   }
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 >
                   <option value="">Select GST %</option>
-                  {gstOptions.map((option) => (
+                  {GST_SLABS.map((option) => (
                     <option key={option} value={option}>
                       {option}%
                     </option>
                   ))}
                 </select>
-                {errors.gstSlab && (
-                  <p className="mt-2 text-sm text-red-600">{errors.gstSlab}</p>
+                {visibleErrors.gstSlab && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {visibleErrors.gstSlab}
+                  </p>
                 )}
               </div>
 
@@ -258,14 +269,16 @@ export function ProductFormModal({
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 >
                   <option value="">Select unit</option>
-                  {unitOptions.map((option) => (
+                  {PRODUCT_UNITS.map((option) => (
                     <option key={option} value={option}>
-                      {option}
+                      {PRODUCT_UNIT_LABELS[option]} ({option})
                     </option>
                   ))}
                 </select>
-                {errors.unit && (
-                  <p className="mt-2 text-sm text-red-600">{errors.unit}</p>
+                {visibleErrors.unit && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {visibleErrors.unit}
+                  </p>
                 )}
               </div>
 
@@ -282,9 +295,9 @@ export function ProductFormModal({
                   inputMode="decimal"
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-[#101010] dark:text-white"
                 />
-                {errors.unitPrice && (
+                {visibleErrors.unitPrice && (
                   <p className="mt-2 text-sm text-red-600">
-                    {errors.unitPrice}
+                    {visibleErrors.unitPrice}
                   </p>
                 )}
               </div>
@@ -300,7 +313,7 @@ export function ProductFormModal({
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || hasErrors}
                 className="rounded-xl bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting

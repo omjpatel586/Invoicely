@@ -1,19 +1,19 @@
 'use client';
 
 import { ICreateProductRequest, IProduct } from '@invoicely/api-interfaces';
+import { getChangedFields } from '@invoicely/utils';
 import { Package } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { ConfirmDeleteDialog } from '../components/ConfirmDeleteDialog';
 import ScreenLoader from '../components/loader';
-import { getChangedFields } from '../utils/diff';
 import {
   createProduct,
   deleteProduct,
   getProducts,
   updateProduct,
 } from '../utils/product';
-import { DeleteProductDialog } from './DeleteProductDialog';
 import { ProductFormModal } from './ProductFormModal';
 import { ProductsTable } from './ProductsTable';
 
@@ -27,9 +27,8 @@ export function ProductsPage() {
   const [isDeleteSubmitting, setIsDeleteSubmitting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productPendingDelete, setProductPendingDelete] = useState<IProduct | null>(
-    null
-  );
+  const [productPendingDelete, setProductPendingDelete] =
+    useState<IProduct | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
   useEffect(() => {
@@ -72,21 +71,7 @@ export function ProductsPage() {
           unit: selectedProduct.unit,
           unitPrice: selectedProduct.unitPrice,
         };
-        const changedFields = getChangedFields<ICreateProductRequest>(
-          previousValues,
-          values,
-          {
-            normalizers: {
-              name: (value) => value?.trim() as ICreateProductRequest['name'],
-              description: (value) =>
-                (value?.trim() || '') as ICreateProductRequest['description'],
-              hsnCode: (value) =>
-                (value?.trim() || '') as ICreateProductRequest['hsnCode'],
-              unitPrice: (value) =>
-                value?.trim() as ICreateProductRequest['unitPrice'],
-            },
-          }
-        );
+        const changedFields = getChangedFields(previousValues, values);
 
         if (!Object.keys(changedFields).length) {
           toast('No changes to update');
@@ -181,9 +166,9 @@ export function ProductsPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-800 dark:bg-[#1a1a1a]">
+      <div className="flex items-start justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm minSm:items-center dark:border-gray-800 dark:bg-[#1a1a1a]">
         <div className="flex items-center gap-3">
-          <div className="hidden rounded-xl bg-indigo-50 p-2 sm:block dark:bg-indigo-500/10">
+          <div className="hidden rounded-xl bg-indigo-50 p-2 minSm:block dark:bg-indigo-500/10">
             <Package className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
@@ -199,7 +184,7 @@ export function ProductsPage() {
 
         <button
           onClick={handleOpenAddModal}
-          className="rounded-xl bg-indigo-600 px-4 py-2.5 font-medium text-white transition hover:bg-indigo-700"
+          className="shrink-0 whitespace-nowrap rounded-xl bg-indigo-600 px-4 py-2.5 font-medium text-white transition hover:bg-indigo-700"
         >
           + Add Product
         </button>
@@ -224,10 +209,14 @@ export function ProductsPage() {
         onSubmit={handleCreateOrUpdate}
       />
 
-      <DeleteProductDialog
+      <ConfirmDeleteDialog
+        confirmLabel="Delete Product"
+        description="The product will permanently disappear from the list."
         isDeleting={isDeleteSubmitting}
         isOpen={isDeleteDialogOpen}
-        product={productPendingDelete}
+        itemName={productPendingDelete?.name ?? null}
+        subtitle="Confirm removal from the active catalog."
+        title="Delete Product"
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteConfirm}
       />

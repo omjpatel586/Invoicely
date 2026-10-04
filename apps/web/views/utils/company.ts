@@ -1,4 +1,4 @@
-import { ICreateCompanyRequest, IGetCompanyResponse, IResponse, IVerifyGSTNumberRequest, IVerifyGSTNumberResponse } from "@invoicely/api-interfaces";
+import { ICompany, ICreateCompanyRequest, IGetCompanyResponse, IResponse, IVerifyGSTNumberRequest, IVerifyGSTNumberResponse } from "@invoicely/api-interfaces";
 import { clientAxios } from "../../libs/axiosInstance";
 
 export const verifyGSTNumber = async ({ gstNumber }: IVerifyGSTNumberRequest, token: string): Promise<IResponse<IVerifyGSTNumberResponse>> => {
@@ -13,5 +13,10 @@ export const createCompany = async (companyDetails: ICreateCompanyRequest, token
 
 export const getUserCompanies = async (token: string): Promise<IResponse<IGetCompanyResponse[]>> => {
   const res = await clientAxios.get('/user/companies', { headers: { Authorization: `Bearer ${token}` } });
+  return res.data;
+};
+
+export const getCompanyById = async (companyId: string, token: string): Promise<IResponse<ICompany>> => {
+  const res = await clientAxios.get(`/user/company/${companyId}`, { headers: { Authorization: `Bearer ${token}` } });
   return res.data;
 };
