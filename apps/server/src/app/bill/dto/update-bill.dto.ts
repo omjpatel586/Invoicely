@@ -1,73 +1,27 @@
-import { BillStatus, BillType, GstSlabNumeric, ProductUnit } from '@invoicely/constants';
+import { BillStatus, BillType } from '@invoicely/constants';
 import { Type } from 'class-transformer';
 import {
+  ArrayMinSize,
   IsArray,
+  IsDateString,
   IsEnum,
-  IsNumber,
+  IsNotEmptyObject,
   IsOptional,
-  IsString,
-  ValidateNested
+  ValidateNested,
 } from 'class-validator';
-
-class BillVendorSnapshotDto {
-  @IsOptional()
-  @IsString()
-  id?: string;
-
-  @IsOptional()
-  @IsString()
-  name?: string;
-}
-
-class BillLineItemDto {
-  @IsOptional()
-  @IsString()
-  id?: string;
-
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsNumber()
-  quantity?: number;
-
-  @IsOptional()
-  @IsEnum(ProductUnit)
-  unit?: ProductUnit;
-
-  @IsOptional()
-  @IsString()
-  unitPrice?: string;
-
-  @IsOptional()
-  @IsEnum(GstSlabNumeric)
-  gstSlab?: GstSlabNumeric;
-
-  @IsOptional()
-  @IsString()
-  totalPrice?: string;
-}
-
-class BillingDetailsDto {
-  @IsOptional()
-  @IsString()
-  amount?: string;
-
-  @IsOptional()
-  @IsString()
-  gstAmount?: string;
-
-  @IsOptional()
-  @IsString()
-  totalAmount?: string;
-}
+import { IsNotPastDate } from '../../../helper/validators/is-not-past-date.validator';
+import {
+  BillingDetailsDto,
+  BillLineItemDto,
+  BillVendorSnapshotDto,
+} from './create-bill.dto';
 
 export class UpdateBillDto {
+  @IsOptional()
+  @IsDateString()
+  @IsNotPastDate({ message: 'Bill date cannot be in the past' })
+  billDate?: string;
+
   @IsOptional()
   @IsEnum(BillType)
   type?: BillType;
@@ -77,22 +31,26 @@ export class UpdateBillDto {
   status?: BillStatus;
 
   @IsOptional()
+  @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => BillVendorSnapshotDto)
   billToVendorDetails?: BillVendorSnapshotDto;
 
   @IsOptional()
+  @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => BillVendorSnapshotDto)
   shipToVendorDetails?: BillVendorSnapshotDto;
 
   @IsOptional()
   @IsArray()
+  @ArrayMinSize(1, { message: 'At least one product is required' })
   @ValidateNested({ each: true })
   @Type(() => BillLineItemDto)
   products?: BillLineItemDto[];
 
   @IsOptional()
+  @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => BillingDetailsDto)
   billingDetails?: BillingDetailsDto;

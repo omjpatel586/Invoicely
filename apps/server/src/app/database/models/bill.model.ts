@@ -1,7 +1,8 @@
 import {
   BillStatus,
   BillType,
-  GstSlabNumeric,
+  GST_SLABS,
+  GstSlab,
   ProductUnit,
 } from '@invoicely/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
@@ -29,17 +30,15 @@ class BillProduct {
   @Prop({ type: String, default: null })
   description: string | null;
 
+  @Prop({ type: String, default: null })
+  hsnCode: string | null;
+
   @Prop({ type: Number, default: null })
   quantity: number | null;
 
   @Prop({
     type: String,
-    enum: [
-      ProductUnit.KG,
-      ProductUnit.LITRE,
-      ProductUnit.GRAM,
-      ProductUnit.PCS,
-    ],
+    enum: ProductUnit,
     default: null,
   })
   unit: ProductUnit | null;
@@ -49,16 +48,10 @@ class BillProduct {
 
   @Prop({
     type: Number,
-    enum: [
-      GstSlabNumeric.ZERO,
-      GstSlabNumeric.FIVE,
-      GstSlabNumeric.TWELVE,
-      GstSlabNumeric.EIGHTEEN,
-      GstSlabNumeric.TWENTY_EIGHT,
-    ],
+    enum: GST_SLABS,
     default: null,
   })
-  gstSlab: GstSlabNumeric | null;
+  gstSlab: GstSlab | null;
 
   @Prop({ type: SchemaTypes.Decimal128, default: null })
   totalPrice: string | null;
@@ -68,6 +61,15 @@ class BillProduct {
 class BillingDetails {
   @Prop({ type: SchemaTypes.Decimal128, default: null })
   amount: string | null;
+
+  @Prop({ type: SchemaTypes.Decimal128, default: null })
+  cgstAmount: string | null;
+
+  @Prop({ type: SchemaTypes.Decimal128, default: null })
+  sgstAmount: string | null;
+
+  @Prop({ type: SchemaTypes.Decimal128, default: null })
+  igstAmount: string | null;
 
   @Prop({ type: SchemaTypes.Decimal128, default: null })
   gstAmount: string | null;
@@ -102,6 +104,7 @@ export class Bill extends BaseSchema {
   @Prop({
     type: String,
     enum: BillType,
+    default: BillType.TAX_INVOICE,
     required: true,
   })
   type: BillType;
@@ -109,7 +112,7 @@ export class Bill extends BaseSchema {
   @Prop({
     type: String,
     enum: BillStatus,
-    default: BillStatus.DRAFT,
+    default: BillStatus.ISSUED,
   })
   status: BillStatus;
 
@@ -124,4 +127,11 @@ export class Bill extends BaseSchema {
 export const BillSchema = SchemaFactory.createForClass(Bill);
 BillSchema.plugin(SoftDeletePlugin);
 BillSchema.index({ company: 1 });
-BillSchema.index({ billNumber: 1, company: 1 }, { unique: true });
+BillSchema.index(
+  { billNumber: 1, company: 1 },
+  {
+    unique: true,
+    name: 'billNumber_company_active_unique',
+    partialFilterExpression: { isDeleted: false },
+  }
+);
