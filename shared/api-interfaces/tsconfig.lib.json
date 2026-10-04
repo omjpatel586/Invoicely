@@ -1,9 +1,17 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "rootDir": "src",
+    "outDir": "../../dist/out-tsc/shared/api-interfaces",
+    "tsBuildInfoFile": "../../dist/out-tsc/shared/api-interfaces/tsconfig.lib.tsbuildinfo",
+    "composite": true,
     "declaration": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    {
+      "path": "../constants/tsconfig.lib.json"
+    }
+  ]
 }
