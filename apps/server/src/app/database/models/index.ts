@@ -66,7 +66,7 @@ export function SoftDeletePlugin(schema: Schema) {
     return this.findByIdAndUpdate(
       id,
       { isDeleted: true, deletedAt: new Date() },
-      { new: true }
+      { returnDocument: 'after' }
     );
   };
 
@@ -74,7 +74,7 @@ export function SoftDeletePlugin(schema: Schema) {
     return this.findByIdAndUpdate(
       id,
       { isDeleted: false, deletedAt: null },
-      { new: true }
+      { returnDocument: 'after' }
     );
   };
 }

@@ -21,17 +21,17 @@ export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
   @Post()
-  create(@Param('companyId') companyId: string, @Body() dto: CreateProductDto) {
+  createProduct(@Param('companyId') companyId: string, @Body() dto: CreateProductDto) {
     return this.productService.create(companyId, dto);
   }
 
   @Get()
-  findAll(@Param('companyId') companyId: string) {
+  getProducts(@Param('companyId') companyId: string) {
     return this.productService.findAll(companyId);
   }
 
   @Get(':productId')
-  findOne(
+  getProductById(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string
   ) {
@@ -39,7 +39,7 @@ export class ProductController {
   }
 
   @Patch(':productId')
-  update(
+  updateProduct(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string,
     @Body() dto: UpdateProductDto
@@ -49,7 +49,7 @@ export class ProductController {
 
   @Delete(':productId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
+  deleteProduct(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string
   ) {

@@ -1,6 +1,12 @@
-import { GstSlab, ProductUnit } from '@invoicely/constants';
+import { GST_SLABS, GstSlab, ProductUnit } from '@invoicely/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { SchemaTypes } from 'mongoose';
 import { SoftDeletePlugin } from '.';
 import { BaseSchema } from './base.model';
@@ -34,28 +40,17 @@ export class Product extends BaseSchema {
   company: string;
 
   @Prop({
-    type: String,
-    enum: [
-      GstSlab.ZERO,
-      GstSlab.FIVE,
-      GstSlab.TWELVE,
-      GstSlab.EIGHTEEN,
-      GstSlab.TWENTY_EIGHT,
-    ],
+    type: Number,
+    enum: GST_SLABS,
     default: null,
   })
   @IsOptional()
-  @IsEnum(GstSlab)
+  @IsIn(GST_SLABS)
   gstSlab: GstSlab | null;
 
   @Prop({
     type: String,
-    enum: [
-      ProductUnit.KG,
-      ProductUnit.LITRE,
-      ProductUnit.GRAM,
-      ProductUnit.PCS,
-    ],
+    enum: ProductUnit,
     default: null,
   })
   @IsOptional()
