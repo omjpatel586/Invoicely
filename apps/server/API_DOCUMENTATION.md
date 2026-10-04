@@ -5,13 +5,13 @@ Developer-facing API reference for integrating the mobile app with the NestJS se
 ## Base URL
 
 ```text
-http://<host>:<port>/api
+http://<host>:<port>/api/v1
 ```
 
 Local example:
 
 ```text
-http://localhost:5000/api
+http://localhost:5000/api/v1
 ```
 
 ## API Conventions
@@ -24,7 +24,7 @@ Most endpoints are protected by `SecurityGuard` and require a Bearer token:
 Authorization: Bearer <authToken>
 ```
 
-Get `authToken` from `POST /api/auth/login/google`.
+Get `authToken` from `POST /api/v1/auth/login/google`.
 
 ### Response Format
 
@@ -59,7 +59,7 @@ Standard NestJS errors can look like:
 
 ### 1. Google Login
 
-`POST /api/auth/login/google`
+`POST /api/v1/auth/login/google`
 
 Authenticates the user with a Google OAuth access token, fetches the Google user profile on the server, and returns an app auth token.
 
@@ -92,7 +92,7 @@ Success response:
 
 ### 2. Logout
 
-`POST /api/auth/logout`
+`POST /api/v1/auth/logout`
 
 Invalidates the session on the client side. Current implementation only returns success; there is no token blacklist.
 
@@ -117,7 +117,7 @@ Success response:
 
 ### Health / Welcome
 
-`GET /api`
+`GET /api/v1`
 
 Auth required: `No`
 
@@ -137,7 +137,7 @@ Success response:
 
 ### Get Logged-In User Profile
 
-`GET /api/user/profile`
+`GET /api/v1/user/profile`
 
 Auth required: `Yes`
 
@@ -169,7 +169,7 @@ All company endpoints require authentication.
 
 ### Verify GST Number
 
-`GET /api/company/gst/verify?gstNumber=<GST_NUMBER>`
+`GET /api/v1/company/gst/verify?gstNumber=<GST_NUMBER>`
 
 Auth required: `Yes`
 
@@ -216,7 +216,7 @@ Success response:
 
 ### Create Company
 
-`POST /api/user/company`
+`POST /api/v1/user/company`
 
 Auth required: `Yes`
 
@@ -271,7 +271,7 @@ Success response:
 
 ### Get Company By ID
 
-`GET /api/user/company/:id`
+`GET /api/v1/user/company/:id`
 
 Auth required: `Yes`
 
@@ -281,7 +281,7 @@ Path params:
 
 ### Get Companies For Logged-In User
 
-`GET /api/user/companies`
+`GET /api/v1/user/companies`
 
 Auth required: `Yes`
 
@@ -294,12 +294,12 @@ All product endpoints are company-scoped and require authentication.
 Base route:
 
 ```text
-/api/companies/:companyId/products
+/api/v1/companies/:companyId/products
 ```
 
 ### Product Enums
 
-`gstSlab`
+`gstSlab` (number)
 
 - `0`
 - `5`
@@ -309,14 +309,11 @@ Base route:
 
 `unit`
 
-- `kg`
-- `litre`
-- `gram`
-- `pcs`
+GST Unique Quantity Codes (UQC), for example `KGS` (kilograms), `LTR` (litres), `GMS` (grams), `PCS` (pieces), `BOX`, `DOZ`, `MTR`, `SQF`, `NOS`, `OTH`. The full list of 44 codes is `ProductUnit` in `shared/constants/src/lib/product.ts`.
 
 ### Create Product
 
-`POST /api/companies/:companyId/products`
+`POST /api/v1/companies/:companyId/products`
 
 Request body:
 
@@ -325,8 +322,8 @@ Request body:
   "name": "Basmati Rice",
   "description": "Premium grade rice",
   "hsnCode": "100630",
-  "gstSlab": "5",
-  "unit": "kg",
+  "gstSlab": 5,
+  "unit": "KGS",
   "unitPrice": "120.50"
 }
 ```
@@ -342,8 +339,8 @@ Success response:
     "name": "Basmati Rice",
     "description": "Premium grade rice",
     "hsnCode": "100630",
-    "gstSlab": "5",
-    "unit": "kg",
+    "gstSlab": 5,
+    "unit": "KGS",
     "unitPrice": "120.50",
     "isActive": true,
     "company": "67f0d2f2b6d5f8f0b8c1a222"
@@ -353,17 +350,17 @@ Success response:
 
 ### Get All Products
 
-`GET /api/companies/:companyId/products`
+`GET /api/v1/companies/:companyId/products`
 
 Returns active products only.
 
 ### Get Product By ID
 
-`GET /api/companies/:companyId/products/:productId`
+`GET /api/v1/companies/:companyId/products/:productId`
 
 ### Update Product
 
-`PATCH /api/companies/:companyId/products/:productId`
+`PATCH /api/v1/companies/:companyId/products/:productId`
 
 Request body:
 
@@ -371,13 +368,13 @@ Request body:
 {
   "name": "Basmati Rice 5kg",
   "unitPrice": "580.00",
-  "gstSlab": "5"
+  "gstSlab": 5
 }
 ```
 
 ### Delete Product
 
-`DELETE /api/companies/:companyId/products/:productId`
+`DELETE /api/v1/companies/:companyId/products/:productId`
 
 Soft delete behavior:
 
@@ -391,12 +388,12 @@ All vendor endpoints are company-scoped and require authentication.
 Base route:
 
 ```text
-/api/companies/:companyId/vendors
+/api/v1/companies/:companyId/vendors
 ```
 
 ### Create Vendor
 
-`POST /api/companies/:companyId/vendors`
+`POST /api/v1/companies/:companyId/vendors`
 
 Request body:
 
@@ -440,15 +437,19 @@ Success response:
 
 ### Get All Vendors
 
-`GET /api/companies/:companyId/vendors`
+`GET /api/v1/companies/:companyId/vendors`
+
+Query params:
+
+- `search` (optional): case-insensitive partial match on `name`, `gstIn`, or `mobileNumber`. Example: `?search=shree`
 
 ### Get Vendor By ID
 
-`GET /api/companies/:companyId/vendors/:vendorId`
+`GET /api/v1/companies/:companyId/vendors/:vendorId`
 
 ### Update Vendor
 
-`PATCH /api/companies/:companyId/vendors/:vendorId`
+`PATCH /api/v1/companies/:companyId/vendors/:vendorId`
 
 Request body:
 
@@ -466,7 +467,7 @@ Request body:
 
 ### Delete Vendor
 
-`DELETE /api/companies/:companyId/vendors/:vendorId`
+`DELETE /api/v1/companies/:companyId/vendors/:vendorId`
 
 Soft delete behavior:
 
@@ -480,28 +481,24 @@ All bill endpoints are company-scoped and require authentication.
 Base route:
 
 ```text
-/api/companies/:companyId/bills
+/api/v1/companies/:companyId/bills
 ```
 
 ### Bill Enums
 
 `type`
 
-- `Tax Invoice`
-- `Bill Of Supply`
+- `Tax Invoice` (default)
+- `Proforma Invoice`
 
 `status`
 
-- `Draft`
-- `Issued`
+- `Issued` (every new bill)
 - `Cancelled`
 
 `products[].unit`
 
-- `kg`
-- `litre`
-- `gram`
-- `pcs`
+GST Unique Quantity Codes (UQC), for example `KGS` (kilograms), `LTR` (litres), `GMS` (grams), `PCS` (pieces), `BOX`, `DOZ`, `MTR`, `SQF`, `NOS`, `OTH`. The full list of 44 codes is `ProductUnit` in `shared/constants/src/lib/product.ts`.
 
 `products[].gstSlab`
 
@@ -513,16 +510,14 @@ Base route:
 
 ### Create Bill
 
-`POST /api/companies/:companyId/bills`
+`POST /api/v1/companies/:companyId/bills`
 
 Recommended request body:
 
 ```json
 {
-  "billNumber": "INV-2026-0001",
   "billDate": "2026-04-05T00:00:00.000Z",
   "type": "Tax Invoice",
-  "status": "Draft",
   "billToVendorDetails": {
     "id": "67f0f2f2b6d5f8f0b8c1a444",
     "name": "Shree Traders"
@@ -536,8 +531,9 @@ Recommended request body:
       "id": "67f0e2f2b6d5f8f0b8c1a333",
       "name": "Basmati Rice",
       "description": "Premium grade rice",
+      "hsnCode": "100630",
       "quantity": 5,
-      "unit": "kg",
+      "unit": "KGS",
       "unitPrice": "120.50",
       "gstSlab": 5,
       "totalPrice": "602.50"
@@ -545,37 +541,74 @@ Recommended request body:
   ],
   "billingDetails": {
     "amount": "602.50",
-    "gstAmount": "30.13",
-    "totalAmount": "632.63"
+    "cgstAmount": "15.06",
+    "sgstAmount": "15.06",
+    "igstAmount": "0.00",
+    "gstAmount": "30.12",
+    "totalAmount": "632.62"
+  }
+}
+```
+
+Success response:
+
+```json
+{
+  "statusCode": 201,
+  "message": "Success",
+  "data": {
+    "_id": "67f102f2b6d5f8f0b8c1a555",
+    "billNumber": 1,
+    "billDate": "2026-04-05T00:00:00.000Z",
+    "type": "Tax Invoice",
+    "status": "Issued",
+    "company": "67f0d2f2b6d5f8f0b8c1a222"
   }
 }
 ```
 
 Important:
 
+- Do not send `billNumber`. The server assigns it as the next sequential number within the company (`1`, `2`, `3`, ...), counting only bills that are not deleted. Deleting the latest bill frees its number for the next bill. Any client-sent value is ignored.
+- `billDate` is optional (ISO 8601 date string). It defaults to the current date and time when omitted. It cannot be in the past (a one-day tolerance covers client timezones); the request fails with `400 Bill date cannot be in the past`.
+- Do not send `status`. Every new bill is created as `Issued`; it can later be changed to `Cancelled` through Update Bill.
+- Send the same vendor in `billToVendorDetails` and `shipToVendorDetails`. The web app bills and ships to one vendor.
 - Send monetary values as strings.
-- Send `products[].gstSlab` as a number, not a string.
-- `billNumber` should be unique within the company.
+- Send `gstSlab` as a number, not a string, for both products and bill lines.
+- `products[].hsnCode` is copied from the product so the printed invoice shows it.
+- Products and vendors are stored as snapshots, so bills stay unchanged when the original product or vendor is later edited or deleted.
+- Totals are calculated by the client. GST applies to both `Tax Invoice` and `Proforma Invoice`.
+- GST split depends on the place of supply. Compare the company and vendor states, using the first two digits of each GSTIN (state code) when both exist, otherwise the state names:
+  - Same state (intra-state): `cgstAmount` and `sgstAmount` are each half the GST per line; `igstAmount` is `0.00`.
+  - Different state (inter-state): `igstAmount` is the full GST; `cgstAmount` and `sgstAmount` are `0.00`.
+  - Vendor state unknown: treated as intra-state.
+- `gstAmount` = `cgstAmount` + `sgstAmount` + `igstAmount`, and `totalAmount` = `amount` + `gstAmount`. Bills created before this split was added have `null` for the three split fields.
 
 ### Get All Bills
 
-`GET /api/companies/:companyId/bills`
+`GET /api/v1/companies/:companyId/bills`
 
 ### Get Bill By ID
 
-`GET /api/companies/:companyId/bills/:billId`
+`GET /api/v1/companies/:companyId/bills/:billId`
 
 ### Update Bill
 
-`PATCH /api/companies/:companyId/bills/:billId`
+`PATCH /api/v1/companies/:companyId/bills/:billId`
+
+Send only the fields that changed. `billNumber` cannot be changed. A new `billDate` follows the same no-past-date rule as Create Bill.
 
 Example request body:
 
 ```json
 {
+  "billDate": "2026-04-06T00:00:00.000Z",
   "status": "Issued",
   "billingDetails": {
     "amount": "602.50",
+    "cgstAmount": "0.00",
+    "sgstAmount": "0.00",
+    "igstAmount": "30.13",
     "gstAmount": "30.13",
     "totalAmount": "632.63"
   }
@@ -584,7 +617,7 @@ Example request body:
 
 ### Delete Bill
 
-`DELETE /api/companies/:companyId/bills/:billId`
+`DELETE /api/v1/companies/:companyId/bills/:billId`
 
 Soft delete behavior:
 
@@ -593,7 +626,7 @@ Soft delete behavior:
 
 ## Integration Checklist For Mobile App
 
-1. Authenticate with `POST /api/auth/login/google` and store `authToken` securely.
+1. Authenticate with `POST /api/v1/auth/login/google` and store `authToken` securely.
 2. Send `Authorization: Bearer <authToken>` for every protected API.
 3. Treat money fields as strings on requests and responses.
 4. Use company-scoped routes for products, vendors, and bills.
@@ -602,28 +635,28 @@ Soft delete behavior:
 
 ## Quick Endpoint Index
 
-| Method   | Endpoint                                        | Auth | Purpose                          |
-| -------- | ----------------------------------------------- | ---- | -------------------------------- |
-| `GET`    | `/api`                                          | No   | Welcome/health route             |
-| `POST`   | `/api/auth/login/google`                        | No   | Login with Google Firebase token |
-| `POST`   | `/api/auth/logout`                              | Yes  | Logout                           |
-| `GET`    | `/api/user/profile`                             | Yes  | Logged-in user profile           |
-| `GET`    | `/api/company/gst/verify?gstNumber=...`         | Yes  | Verify GST number                |
-| `POST`   | `/api/user/company`                             | Yes  | Create company                   |
-| `GET`    | `/api/user/company/:id`                         | Yes  | Get company by ID                |
-| `GET`    | `/api/user/companies`                           | Yes  | List user companies              |
-| `POST`   | `/api/companies/:companyId/products`            | Yes  | Create product                   |
-| `GET`    | `/api/companies/:companyId/products`            | Yes  | List products                    |
-| `GET`    | `/api/companies/:companyId/products/:productId` | Yes  | Get product                      |
-| `PATCH`  | `/api/companies/:companyId/products/:productId` | Yes  | Update product                   |
-| `DELETE` | `/api/companies/:companyId/products/:productId` | Yes  | Delete product                   |
-| `POST`   | `/api/companies/:companyId/vendors`             | Yes  | Create vendor                    |
-| `GET`    | `/api/companies/:companyId/vendors`             | Yes  | List vendors                     |
-| `GET`    | `/api/companies/:companyId/vendors/:vendorId`   | Yes  | Get vendor                       |
-| `PATCH`  | `/api/companies/:companyId/vendors/:vendorId`   | Yes  | Update vendor                    |
-| `DELETE` | `/api/companies/:companyId/vendors/:vendorId`   | Yes  | Delete vendor                    |
-| `POST`   | `/api/companies/:companyId/bills`               | Yes  | Create bill                      |
-| `GET`    | `/api/companies/:companyId/bills`               | Yes  | List bills                       |
-| `GET`    | `/api/companies/:companyId/bills/:billId`       | Yes  | Get bill                         |
-| `PATCH`  | `/api/companies/:companyId/bills/:billId`       | Yes  | Update bill                      |
-| `DELETE` | `/api/companies/:companyId/bills/:billId`       | Yes  | Delete bill                      |
+| Method   | Endpoint                                           | Auth | Purpose                          |
+| -------- | -------------------------------------------------- | ---- | -------------------------------- |
+| `GET`    | `/api/v1`                                          | No   | Welcome/health route             |
+| `POST`   | `/api/v1/auth/login/google`                        | No   | Login with Google Firebase token |
+| `POST`   | `/api/v1/auth/logout`                              | Yes  | Logout                           |
+| `GET`    | `/api/v1/user/profile`                             | Yes  | Logged-in user profile           |
+| `GET`    | `/api/v1/company/gst/verify?gstNumber=...`         | Yes  | Verify GST number                |
+| `POST`   | `/api/v1/user/company`                             | Yes  | Create company                   |
+| `GET`    | `/api/v1/user/company/:id`                         | Yes  | Get company by ID                |
+| `GET`    | `/api/v1/user/companies`                           | Yes  | List user companies              |
+| `POST`   | `/api/v1/companies/:companyId/products`            | Yes  | Create product                   |
+| `GET`    | `/api/v1/companies/:companyId/products`            | Yes  | List products                    |
+| `GET`    | `/api/v1/companies/:companyId/products/:productId` | Yes  | Get product                      |
+| `PATCH`  | `/api/v1/companies/:companyId/products/:productId` | Yes  | Update product                   |
+| `DELETE` | `/api/v1/companies/:companyId/products/:productId` | Yes  | Delete product                   |
+| `POST`   | `/api/v1/companies/:companyId/vendors`             | Yes  | Create vendor                    |
+| `GET`    | `/api/v1/companies/:companyId/vendors`             | Yes  | List vendors                     |
+| `GET`    | `/api/v1/companies/:companyId/vendors/:vendorId`   | Yes  | Get vendor                       |
+| `PATCH`  | `/api/v1/companies/:companyId/vendors/:vendorId`   | Yes  | Update vendor                    |
+| `DELETE` | `/api/v1/companies/:companyId/vendors/:vendorId`   | Yes  | Delete vendor                    |
+| `POST`   | `/api/v1/companies/:companyId/bills`               | Yes  | Create bill                      |
+| `GET`    | `/api/v1/companies/:companyId/bills`               | Yes  | List bills                       |
+| `GET`    | `/api/v1/companies/:companyId/bills/:billId`       | Yes  | Get bill                         |
+| `PATCH`  | `/api/v1/companies/:companyId/bills/:billId`       | Yes  | Update bill                      |
+| `DELETE` | `/api/v1/companies/:companyId/bills/:billId`       | Yes  | Delete bill                      |

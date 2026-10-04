@@ -51,32 +51,127 @@ Consistency is the highest priority in this codebase. Follow these rules without
 | --------------------- | --------------------------------------------------------------------------- |
 | **Consistency**       | Strictly adhere to existing project logic, patterns, and naming conventions |
 | **Strict Typing**     | Always use TypeScript `enum`s for categorical or finite-value fields        |
-| **Schema Validation** | Define enums explicitly in Mongoose schemas                                 |
-| **Enum Values**       | Never use `Object.values()` for Mongoose enum creation or validation        |
+| **Schema Validation** | Pass string enums directly to `@Prop({ enum })`; numeric enums use a value list |
+| **Enum Values**       | Never use `Object.values()` on a numeric enum (it includes reverse-mapped names) |
 | **Tenant Isolation**  | All queries must be scoped to `company` ObjectId                            |
+| **Controller Naming** | Name controller handlers after the API use case, not the service method     |
+| **Enum Typing**       | Fields with a fixed value set use their enum type everywhere, never `string` |
+| **Shared Logic**      | Business logic used by more than one app lives in `shared/` libraries       |
+| **Partial Updates**   | Edit APIs use `PATCH`; the frontend sends only the changed fields           |
+
+### Controller Handler Naming
+
+Controller handlers describe what the endpoint does for the API consumer, using the resource name. Services keep generic data-access names (`create`, `findAll`, `findOne`, `update`, `remove`), so the controller reads as the API surface and the service as the implementation.
+
+| HTTP                        | Controller handler | Service method |
+| --------------------------- | ------------------ | -------------- |
+| `POST /vendors`             | `createVendor`     | `create`       |
+| `GET /vendors`              | `getVendors`       | `findAll`      |
+| `GET /vendors/:vendorId`    | `getVendorById`    | `findOne`      |
+| `PATCH /vendors/:vendorId`  | `updateVendor`     | `update`       |
+| `DELETE /vendors/:vendorId` | `deleteVendor`     | `remove`       |
+
+```typescript
+// ✅ CORRECT — handler named for the use case
+@Get()
+getVendors(@Param('companyId') companyId: string) {
+  return this.vendorService.findAll(companyId);
+}
+
+// ❌ WRONG — handler mirrors the service method name
+@Get()
+findAll(@Param('companyId') companyId: string) {
+  return this.vendorService.findAll(companyId);
+}
+```
+
+Match the frontend API function names (`views/utils/<resource>.ts`) so a handler can be found from its caller.
+
+### Enum Typing
+
+If a field can only hold a fixed set of values, declare an `enum` in `@invoicely/constants` and use that enum type in **every** layer: shared interfaces, Mongoose models, DTOs, and helper/return types. Never widen it to `string`, and never use a string union where an enum exists.
+
+```typescript
+// ✅ CORRECT — enum type in the interface, model, and DTO
+export interface IVendorAddress {
+  state: IndianState | null;
+}
+
+@Prop({ type: String, enum: INDIAN_STATES, default: null })
+state: IndianState | null;
+
+@IsEnum(IndianState)
+state: IndianState;
+
+// ❌ WRONG — enum-like value typed as a plain string or union
+state: string | null;
+type GstSupplyType = 'INTRA_STATE' | 'INTER_STATE';
+```
+
+Values that come from external systems (e.g. the GST registry) are mapped onto the enum at the boundary (`toIndianState`) before they are stored.
+
+### Shared Libraries
+
+Code used by both apps lives in `shared/` and is imported through its path alias. Never copy logic or patterns between `apps/server` and `apps/web`.
+
+| Library                     | Contains                                                                  |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `@invoicely/constants`      | Enums, enum value lists, validation patterns (GSTIN, PIN, money, mobile) |
+| `@invoicely/api-interfaces` | Request/response and entity interfaces shared by server and web           |
+| `@invoicely/utils`          | Framework-free business logic: GST calculations, supply type, change diff |
+
+`@invoicely/utils` must stay framework-free (no NestJS, React, or Mongoose imports) so both apps can use it.
+
+### Partial Updates (PATCH)
+
+All edit endpoints use `PATCH`. The frontend builds the payload with `getChangedFields(previous, next)` from `@invoicely/utils`, which deep-compares any value type (strings are trimmed; `null`, `undefined`, and `''` are treated as empty) and returns only the changed top-level fields. Nested objects (e.g. `address`, `billingDetails`) are sent whole when any part changes, so update DTOs can validate them completely.
 
 ### Enum Declaration Pattern
 
 ```typescript
-// ✅ CORRECT — Explicit enum declaration
-export enum GstSlab {
-  ZERO    = '0',
-  FIVE    = '5',
-  TWELVE  = '12',
-  EIGHTEEN = '18',
-  TWENTY_EIGHT = '28',
+// String enum — values are the stored strings
+export enum BillStatus {
+  ISSUED = 'Issued',
+  CANCELLED = 'Cancelled',
 }
 
-// ❌ WRONG — Never use Object.values() in schema enums
-gstSlab: { type: String, enum: Object.values(GstSlab) }
+// Numeric enum — also export an explicit value list
+export enum GstSlab {
+  ZERO = 0,
+  FIVE = 5,
+  TWELVE = 12,
+  EIGHTEEN = 18,
+  TWENTY_EIGHT = 28,
+}
+
+export const GST_SLABS: GstSlab[] = [
+  GstSlab.ZERO,
+  GstSlab.FIVE,
+  GstSlab.TWELVE,
+  GstSlab.EIGHTEEN,
+  GstSlab.TWENTY_EIGHT,
+];
 ```
 
 ### Mongoose Schema Enum Pattern
 
 ```typescript
-// ✅ CORRECT — Explicit array in schema definition
-gstSlab: { type: String, enum: ['0', '5', '12', '18', '28'] }
+// ✅ CORRECT — string enum passed directly
+@Prop({ type: String, enum: BillStatus, default: BillStatus.ISSUED })
+status: BillStatus;
+
+// ✅ CORRECT — numeric enum uses its explicit value list
+@Prop({ type: Number, enum: GST_SLABS, default: null })
+gstSlab: GstSlab | null;
+
+// ❌ WRONG — numeric enum passed directly also allows 'ZERO', 'FIVE', ...
+@Prop({ type: Number, enum: GstSlab })
+
+// ❌ WRONG — hand-written string list duplicates the enum
+@Prop({ type: String, enum: ['Issued', 'Cancelled'] })
 ```
+
+In DTOs use `@IsEnum(StringEnum)` for string enums and `@IsIn(NUMERIC_VALUES)` for numeric enums.
 
 ---
 
@@ -114,7 +209,7 @@ The current draft lacks pricing data on the product itself. Bills snapshot produ
 
 ```typescript
 unitPrice:  { type: Schema.Types.Decimal128, required: true }
-unit:       { type: String, enum: ['kg', 'litre', 'gram', 'pcs'] }
+unit:       { type: String, enum: ProductUnit }
 isActive:   { type: Boolean, default: true }
 ```
 
@@ -165,7 +260,7 @@ For GST compliance and business operations, bills need a unique identifier and a
 
 ```typescript
 billNumber: { type: String, unique: true, required: true }  // e.g., INV-2024-0001
-status:     { type: String, enum: ['Draft', 'Issued', 'Cancelled'], default: 'Draft' }
+status:     { type: String, enum: ['Issued', 'Cancelled'], default: 'Issued' }
 billDate:   { type: Date, required: true, default: Date.now }
 ```
 
@@ -184,8 +279,8 @@ billDate:   { type: Date, required: true, default: Date.now }
 | `name`        | `String`        | Yes      | Product or service name              |
 | `description` | `String`        | No       | Optional description                 |
 | `hsnCode`     | `String`        | No       | HSN/SAC code for GST                 |
-| `gstSlab`     | `String` (enum) | No       | GST rate: `0`, `5`, `12`, `18`, `28` |
-| `unit`        | `String` (enum) | No       | Unit of measure                      |
+| `gstSlab`     | `Number` (enum) | No       | `GstSlab`: `0`, `5`, `12`, `18`, `28` |
+| `unit`        | `String` (enum) | No       | `ProductUnit` GST UQC code, e.g. KGS |
 | `unitPrice`   | `Decimal128`    | Yes      | Base selling price                   |
 | `isActive`    | `Boolean`       | No       | Soft-delete / catalog visibility     |
 | `company`     | `ObjectId`      | Yes      | Tenant reference — always required   |
@@ -224,8 +319,8 @@ billDate:   { type: Date, required: true, default: Date.now }
 | --------------------- | --------------- | -------- | ------------------------------------------ |
 | `billNumber`          | `String`        | Yes      | Unique per company — e.g., `INV-2024-0001` |
 | `billDate`            | `Date`          | Yes      | Date of invoice                            |
-| `type`                | `String` (enum) | Yes      | `Tax Invoice` or `Bill Of Supply`          |
-| `status`              | `String` (enum) | No       | `Draft`, `Issued`, `Cancelled`             |
+| `type`                | `String` (enum) | Yes      | `Tax Invoice` or `Proforma Invoice`        |
+| `status`              | `String` (enum) | No       | `Issued` (on create), `Cancelled`          |
 | `billToVendorDetails` | Sub-document    | No       | Snapshot of billing party                  |
 | `shipToVendorDetails` | Sub-document    | No       | Snapshot of shipping party                 |
 | `products[]`          | Array           | No       | Line-item product snapshots                |
@@ -244,14 +339,6 @@ billDate:   { type: Date, required: true, default: Date.now }
 // libs/api-interfaces/src/lib/enums/gst-slab.enum.ts
 
 export enum GstSlab {
-  ZERO = '0',
-  FIVE = '5',
-  TWELVE = '12',
-  EIGHTEEN = '18',
-  TWENTY_EIGHT = '28',
-}
-
-export enum GstSlabNumeric {
   ZERO = 0,
   FIVE = 5,
   TWELVE = 12,
@@ -259,20 +346,21 @@ export enum GstSlabNumeric {
   TWENTY_EIGHT = 28,
 }
 
+// GST Unique Quantity Codes; full list in shared/constants/src/lib/product.ts
 export enum ProductUnit {
-  KG = 'kg',
-  LITRE = 'litre',
-  GRAM = 'gram',
-  PCS = 'pcs',
+  KILOGRAMS = 'KGS',
+  LITRES = 'LTR',
+  GRAMS = 'GMS',
+  PIECES = 'PCS',
+  // ...
 }
 
 export enum BillType {
   TAX_INVOICE = 'Tax Invoice',
-  BILL_OF_SUPPLY = 'Bill Of Supply',
+  PROFORMA_INVOICE = 'Proforma Invoice',
 }
 
 export enum BillStatus {
-  DRAFT = 'Draft',
   ISSUED = 'Issued',
   CANCELLED = 'Cancelled',
 }
@@ -340,7 +428,7 @@ import {
   BillType,
   BillStatus,
   ProductUnit,
-  GstSlabNumeric,
+  GstSlab,
 } from '../enums/gst-slab.enum';
 
 export interface IBillVendorSnapshot {
@@ -355,7 +443,7 @@ export interface IBillLineItem {
   quantity: number | null;
   unit: ProductUnit | null;
   unitPrice: Types.Decimal128 | null;
-  gstSlab: GstSlabNumeric | null;
+  gstSlab: GstSlab | null;
   totalPrice: Types.Decimal128 | null;
 }
 
@@ -396,8 +484,8 @@ export interface ProductDocument extends Document {
   name: string;
   description: string | null;
   hsnCode: string | null;
-  gstSlab: string | null;
-  unit: string | null;
+  gstSlab: GstSlab | null;
+  unit: ProductUnit | null;
   unitPrice: Types.Decimal128;
   isActive: boolean;
   company: Types.ObjectId;
@@ -408,12 +496,8 @@ const ProductSchema = new Schema<ProductDocument>(
     name: { type: String, required: true },
     description: { type: String, default: null },
     hsnCode: { type: String, default: null },
-    gstSlab: {
-      type: String,
-      enum: ['0', '5', '12', '18', '28'],
-      default: null,
-    },
-    unit: { type: String, enum: ['kg', 'litre', 'gram', 'pcs'], default: null },
+    gstSlab: { type: Number, enum: GST_SLABS, default: null },
+    unit: { type: String, enum: ProductUnit, default: null },
     unitPrice: { type: Schema.Types.Decimal128, required: true },
     isActive: { type: Boolean, default: true },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
@@ -498,9 +582,9 @@ export interface BillDocument extends Document {
     name: string | null;
     description: string | null;
     quantity: number | null;
-    unit: string | null;
+    unit: ProductUnit | null;
     unitPrice: Types.Decimal128 | null;
-    gstSlab: number | null;
+    gstSlab: GstSlab | null;
     totalPrice: Types.Decimal128 | null;
   }[];
   billingDetails: {
@@ -517,13 +601,13 @@ const BillSchema = new Schema<BillDocument>(
     billDate: { type: Date, required: true, default: Date.now },
     type: {
       type: String,
-      enum: ['Tax Invoice', 'Bill Of Supply'],
+      enum: ['Tax Invoice', 'Proforma Invoice'],
       required: true,
     },
     status: {
       type: String,
-      enum: ['Draft', 'Issued', 'Cancelled'],
-      default: 'Draft',
+      enum: ['Issued', 'Cancelled'],
+      default: 'Issued',
     },
 
     billToVendorDetails: {
@@ -541,13 +625,9 @@ const BillSchema = new Schema<BillDocument>(
         name: { type: String, default: null },
         description: { type: String, default: null },
         quantity: { type: Number, default: null },
-        unit: {
-          type: String,
-          enum: ['kg', 'litre', 'gram', 'pcs'],
-          default: null,
-        },
+        unit: { type: String, enum: ProductUnit, default: null },
         unitPrice: { type: Schema.Types.Decimal128, default: null },
-        gstSlab: { type: Number, enum: [0, 5, 12, 18, 28], default: null },
+        gstSlab: { type: Number, enum: GST_SLABS, default: null },
         totalPrice: { type: Schema.Types.Decimal128, default: null },
       },
     ],
@@ -597,7 +677,7 @@ export class CreateProductDto {
   hsnCode?: string;
 
   @IsOptional()
-  @IsEnum(GstSlab)
+  @IsIn(GST_SLABS)
   gstSlab?: GstSlab;
 
   @IsOptional()
@@ -729,17 +809,17 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Param('companyId') companyId: string, @Body() dto: CreateProductDto) {
+  createProduct(@Param('companyId') companyId: string, @Body() dto: CreateProductDto) {
     return this.productService.create(companyId, dto);
   }
 
   @Get()
-  findAll(@Param('companyId') companyId: string) {
+  getProducts(@Param('companyId') companyId: string) {
     return this.productService.findAll(companyId);
   }
 
   @Get(':productId')
-  findOne(
+  getProductById(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string
   ) {
@@ -747,7 +827,7 @@ export class ProductController {
   }
 
   @Patch(':productId')
-  update(
+  updateProduct(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string,
     @Body() dto: UpdateProductDto
@@ -757,7 +837,7 @@ export class ProductController {
 
   @Delete(':productId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
+  deleteProduct(
     @Param('companyId') companyId: string,
     @Param('productId') productId: string
   ) {
@@ -782,7 +862,7 @@ export class ProductController {
 
 ### Shared Library (`libs/api-interfaces`)
 
-- [ ] Create `GstSlab`, `GstSlabNumeric`, `ProductUnit`, `BillType`, `BillStatus` enums
+- [ ] Create `GstSlab`, `ProductUnit`, `BillType`, `BillStatus` enums
 - [ ] Create `IProduct` interface
 - [ ] Create `IVendor`, `IVendorAddress` interfaces
 - [ ] Create `IBill`, `IBillLineItem`, `IBillingDetails`, `IBillVendorSnapshot` interfaces
