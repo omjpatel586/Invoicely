@@ -20,7 +20,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -30,6 +29,9 @@
       ],
       "@invoicely/constants": [
         "../../shared/constants/src/index.ts"
+      ],
+      "@invoicely/utils": [
+        "../../shared/utils/src/index.ts"
       ]
     },
     "plugins": [
@@ -43,7 +45,6 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "../../apps/web/.next/types/**/*.ts",
     "../../dist/apps/web/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"

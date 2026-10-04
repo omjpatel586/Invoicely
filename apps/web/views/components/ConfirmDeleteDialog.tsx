@@ -1,24 +1,37 @@
 'use client';
 
-import { IProduct } from '@invoicely/api-interfaces';
 import { AlertTriangle, X } from 'lucide-react';
 
-interface DeleteProductDialogProps {
+interface ConfirmDeleteDialogProps {
+  actionVerb?: string;
+  confirmLabel: string;
+  description: string;
+  dismissLabel?: string;
   isDeleting: boolean;
   isOpen: boolean;
-  product: IProduct | null;
+  itemName: string | null;
+  subtitle: string;
+  title: string;
   onClose: () => void;
   onConfirm: () => void;
+  pendingLabel?: string;
 }
 
-export function DeleteProductDialog({
+export function ConfirmDeleteDialog({
+  actionVerb = 'delete',
+  confirmLabel,
+  description,
+  dismissLabel = 'Cancel',
   isDeleting,
   isOpen,
-  product,
+  itemName,
+  subtitle,
+  title,
   onClose,
   onConfirm,
-}: DeleteProductDialogProps) {
-  if (!isOpen || !product) {
+  pendingLabel = 'Deleting...',
+}: ConfirmDeleteDialogProps) {
+  if (!isOpen || !itemName) {
     return null;
   }
 
@@ -33,10 +46,10 @@ export function DeleteProductDialog({
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Delete Product
+                  {title}
                 </h3>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Confirm removal from the active catalog.
+                  {subtitle}
                 </p>
               </div>
             </div>
@@ -52,14 +65,14 @@ export function DeleteProductDialog({
           <div className="space-y-5 p-6">
             <div className="rounded-2xl border border-red-100 bg-red-50/70 p-4 dark:border-red-900/50 dark:bg-red-950/20">
               <p className="text-sm leading-7 text-gray-700 dark:text-gray-200">
-                You are about to delete{' '}
+                You are about to {actionVerb}{' '}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                  {product.name}
+                  {itemName}
                 </span>
                 .
               </p>
               <p className="mt-2 text-sm leading-7 text-gray-600 dark:text-gray-300">
-                The product will permanently disappear from the list.
+                {description}
               </p>
             </div>
 
@@ -69,7 +82,7 @@ export function DeleteProductDialog({
                 onClick={onClose}
                 className="rounded-xl border border-gray-200 px-5 py-3 font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
               >
-                Cancel
+                {dismissLabel}
               </button>
               <button
                 type="button"
@@ -77,7 +90,7 @@ export function DeleteProductDialog({
                 disabled={isDeleting}
                 className="rounded-xl bg-red-600 px-5 py-3 font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isDeleting ? 'Deleting...' : 'Delete Product'}
+                {isDeleting ? pendingLabel : confirmLabel}
               </button>
             </div>
           </div>

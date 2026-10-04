@@ -1,6 +1,7 @@
 import {
   CompanyStatus,
   ConstitutionOfBusiness,
+  IndianState,
   TaxPayerType,
 } from '@invoicely/constants';
 
@@ -10,7 +11,7 @@ export interface IAddress {
   location: string;
   buildingNumber: string;
   district: string;
-  state: string;
+  state: IndianState | null;
   city: string;
   flatNumber: string;
   pincode: string;
@@ -62,7 +63,7 @@ export interface IVerifyGSTNumberResponse extends Partial<ICompany> {
 }
 
 export interface ICreateCompanyRequest {
-  gstIn: string; 
+  gstIn: string;
   legalName: string;
   tradeName: string;
 
@@ -86,7 +87,7 @@ export interface ICreateCompanyRequest {
 export interface IGetCompanyResponse {
   _id: string;
 
-  gstIn: string; 
+  gstIn: string;
   legalName: string;
   tradeName: string;
 

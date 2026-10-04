@@ -8,3 +8,8 @@ This is a monolith application using NX.
 2. web app : this is a nextjs app for frontend web panel of this software.
 
 First read the README.md file on root of this project to understand everything about it.
+
+## Git
+
+- Never add `Co-Authored-By` trailers, AI attribution, or any tool or marketing lines (such as "Generated with ...") to commit messages or pull request descriptions.
+- Prefix commit messages with their category: `feat:`, `fix:`, or `improvement:`.

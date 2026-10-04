@@ -25,7 +25,11 @@
           "watchDepsName": "watch-deps"
         }
       },
-      "exclude": ["shared/api-interfaces/*", "shared/constants/*"]
+      "exclude": [
+        "shared/api-interfaces/*",
+        "shared/constants/*",
+        "shared/utils/*"
+      ]
     },
     {
       "plugin": "@nx/next/plugin",
@@ -57,7 +61,11 @@
     },
     {
       "plugin": "@nx/js/typescript",
-      "include": ["shared/api-interfaces/*", "shared/constants/*"],
+      "include": [
+        "shared/api-interfaces/*",
+        "shared/constants/*",
+        "shared/utils/*"
+      ],
       "options": {
         "typecheck": {
           "targetName": "typecheck"

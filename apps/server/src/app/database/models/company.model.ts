@@ -3,6 +3,7 @@ import type { IAddress, IBranchAddress } from '@invoicely/api-interfaces';
 import {
   CompanyStatus,
   ConstitutionOfBusiness,
+  IndianState,
   TaxPayerType,
 } from '@invoicely/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
@@ -28,8 +29,8 @@ export class Address {
   @Prop({ type: String })
   district: string;
 
-  @Prop({ type: String })
-  state: string;
+  @Prop({ type: String, enum: IndianState, default: null })
+  state: IndianState | null;
 
   @Prop({ type: String })
   city: string;

@@ -21,11 +21,24 @@ export class VendorService {
     return vendor.save();
   }
 
-  async findAll(companyId: string) {
-    return this.vendorModel
-      .find({ company: new Types.ObjectId(companyId) })
-      .sort({ createdAt: -1 })
-      .lean();
+  async findAll(companyId: string, search?: string) {
+    const filter: Record<string, unknown> = {
+      company: new Types.ObjectId(companyId),
+    };
+
+    if (search?.trim()) {
+      const pattern = new RegExp(
+        search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        'i'
+      );
+      filter.$or = [
+        { name: pattern },
+        { gstIn: pattern },
+        { mobileNumber: pattern },
+      ];
+    }
+
+    return this.vendorModel.find(filter).sort({ createdAt: -1 }).lean();
   }
 
   async findOne(companyId: string, vendorId: string) {
@@ -54,7 +67,7 @@ export class VendorService {
         company: new Types.ObjectId(companyId),
       },
       { $set: updatePayload },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!vendor) {
@@ -71,7 +84,7 @@ export class VendorService {
         company: new Types.ObjectId(companyId),
       },
       { $set: { isDeleted: true, deletedAt: new Date() } },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!vendor) {

@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SecurityGuard } from '../guards/auth.guard';
@@ -21,17 +22,20 @@ export class VendorController {
   constructor(private readonly vendorService: VendorService) {}
 
   @Post()
-  create(@Param('companyId') companyId: string, @Body() dto: CreateVendorDto) {
+  createVendor(@Param('companyId') companyId: string, @Body() dto: CreateVendorDto) {
     return this.vendorService.create(companyId, dto);
   }
 
   @Get()
-  findAll(@Param('companyId') companyId: string) {
-    return this.vendorService.findAll(companyId);
+  getVendors(
+    @Param('companyId') companyId: string,
+    @Query('search') search?: string
+  ) {
+    return this.vendorService.findAll(companyId, search);
   }
 
   @Get(':vendorId')
-  findOne(
+  getVendorById(
     @Param('companyId') companyId: string,
     @Param('vendorId') vendorId: string
   ) {
@@ -39,7 +43,7 @@ export class VendorController {
   }
 
   @Patch(':vendorId')
-  update(
+  updateVendor(
     @Param('companyId') companyId: string,
     @Param('vendorId') vendorId: string,
     @Body() dto: UpdateVendorDto
@@ -49,7 +53,7 @@ export class VendorController {
 
   @Delete(':vendorId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
+  deleteVendor(
     @Param('companyId') companyId: string,
     @Param('vendorId') vendorId: string
   ) {

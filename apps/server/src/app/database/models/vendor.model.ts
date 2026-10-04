@@ -1,3 +1,4 @@
+import { IndianState } from '@invoicely/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { SchemaTypes, Types } from 'mongoose';
@@ -12,8 +13,8 @@ class VendorAddress {
   @Prop({ type: String, trim: true, default: null })
   city: string | null;
 
-  @Prop({ type: String, trim: true, default: null })
-  state: string | null;
+  @Prop({ type: String, enum: IndianState, default: null })
+  state: IndianState | null;
 
   @Prop({ type: String, trim: true, default: null })
   pinCode: string | null;

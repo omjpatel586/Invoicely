@@ -1,10 +1,12 @@
 import { ICompany } from '@invoicely/api-interfaces';
-import { CompanyStatus, ConstitutionOfBusiness, TaxPayerType } from '@invoicely/constants';
+import { CompanyStatus, ConstitutionOfBusiness, GSTIN_PATTERN, TaxPayerType } from '@invoicely/constants';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { toIndianState } from '@invoicely/utils';
 import { Company } from '../database/models/company.model';
+import { CreateCompanyDto } from './dto/company.dto';
 import { RegisteredGSTVerificationService } from './utils/cashfree.service';
 
 @Injectable()
@@ -19,9 +21,7 @@ export class CompanyService {
 
   verifyGSTFormat(gstNumber: string): boolean {
     // Basic GST number validation logic
-    const gstRegex =
-      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-    return this.isDevelopment ? true : gstRegex.test(gstNumber);
+    return this.isDevelopment ? true : GSTIN_PATTERN.test(gstNumber);
   }
 
   async verifyGSTNumber(gstNumber: string): Promise<Partial<ICompany>> {
@@ -44,7 +44,7 @@ export class CompanyService {
         location: gstData.data.principal_place_split_address.location,
         street: gstData.data.principal_place_split_address.street,
         district: gstData.data.principal_place_split_address.district,
-        state: gstData.data.principal_place_split_address.state,
+        state: toIndianState(gstData.data.principal_place_split_address.state),
         city: gstData.data.principal_place_split_address.city,
         flatNumber: gstData.data.principal_place_split_address.flat_number,
         pincode: gstData.data.principal_place_split_address.pincode,
@@ -59,7 +59,7 @@ export class CompanyService {
           location: branch.split_address.location,
           street: branch.split_address.street,
           district: branch.split_address.district,
-          state: branch.split_address.state,
+          state: toIndianState(branch.split_address.state),
           city: branch.split_address.city,
           flatNumber: branch.split_address.flat_number,
           pincode: branch.split_address.pincode,
@@ -70,7 +70,7 @@ export class CompanyService {
     };
   }
 
-  async createCompany(companyData: Company) {
+  async createCompany(companyData: CreateCompanyDto) {
     const createdCompany = new this.companyModel(companyData);
     return await createdCompany.save();
   }

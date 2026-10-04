@@ -1,12 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["es2022"],
-    "baseUrl": ".",
     "module": "nodenext",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,8 +17,9 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@invoicely/api-interfaces": ["shared/api-interfaces/src/index.ts"],
-      "@invoicely/constants": ["shared/constants/src/index.ts"]
+      "@invoicely/api-interfaces": ["./shared/api-interfaces/src/index.ts"],
+      "@invoicely/constants": ["./shared/constants/src/index.ts"],
+      "@invoicely/utils": ["./shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

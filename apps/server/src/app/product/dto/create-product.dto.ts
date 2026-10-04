@@ -1,28 +1,33 @@
-import { GstSlab, ProductUnit } from '@invoicely/constants';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  GST_SLABS,
+  GstSlab,
+  MONEY_PATTERN,
+  ProductUnit,
+} from '@invoicely/constants';
+import { IsEnum, IsIn, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { moneyMessage } from '../../../helper/validators/validation.messages';
 
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsOptional()
   @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsString()
-  hsnCode?: string;
-
-  @IsOptional()
-  @IsEnum(GstSlab)
-  gstSlab?: GstSlab;
-
-  @IsOptional()
-  @IsEnum(ProductUnit)
-  unit?: ProductUnit;
+  @IsNotEmpty()
+  description: string;
 
   @IsString()
   @IsNotEmpty()
+  hsnCode: string;
+
+  @IsIn(GST_SLABS, {
+    message: `gstSlab must be one of: ${GST_SLABS.join(', ')}`,
+  })
+  gstSlab: GstSlab;
+
+  @IsEnum(ProductUnit)
+  unit: ProductUnit;
+
+  @Matches(MONEY_PATTERN, { message: moneyMessage('unitPrice') })
   unitPrice: string;
 }
