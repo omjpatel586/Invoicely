@@ -30,6 +30,9 @@
       ],
       "@invoicely/constants": [
         "../../shared/constants/src/index.ts"
+      ],
+      "@invoicely/utils": [
+        "../../shared/utils/src/index.ts"
       ]
     },
     "plugins": [

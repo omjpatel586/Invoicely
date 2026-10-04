@@ -1,7 +1,9 @@
+import { IndianState } from '@invoicely/constants';
+
 export interface IVendorAddress {
   line1: string | null;
   city: string | null;
-  state: string | null;
+  state: IndianState | null;
   pinCode: string | null;
 }
 

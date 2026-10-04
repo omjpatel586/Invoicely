@@ -18,7 +18,8 @@
     "target": "es2022",
     "paths": {
       "@invoicely/api-interfaces": ["shared/api-interfaces/src/index.ts"],
-      "@invoicely/constants": ["shared/constants/src/index.ts"]
+      "@invoicely/constants": ["shared/constants/src/index.ts"],
+      "@invoicely/utils": ["shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
